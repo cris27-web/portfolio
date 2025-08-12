@@ -202,28 +202,38 @@ header {
     background: var(--accent-color-dark);
   }
 }
-
-#time-display {
-  text-align: center;
-  margin: 3rem 0;
-
-  h3 {
-    color: var(--accent-color);
-    margin-bottom: 1rem;
-  }
-
-  #time {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--accent-color-dark);
-  }
-
-  #date {
-    font-size: 1.2rem;
-    color: #cbb86e;
-    margin-top: 0.5rem;
-  }
+#back-to-top:focus {
+  outline: 2px solid var(--accent-color-dark);
+  outline-offset: 4px;
 }
+#floating-time-widget {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: var(--bg-color);
+  color: var(--accent-color);
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  user-select: none;
+  z-index: 10000;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  cursor: default;
+}
+
+#floating-time-widget:hover {
+  opacity: 1;
+}
+
+#floating-time {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+
 
 #about {
   background: rgba(255, 176, 28, 0.1);  /* subtle tinted background using accent color with transparency */

@@ -148,35 +148,24 @@ function formatDate(date) {
 let prevTime = '';
 let prevDate = '';
 
-function updateTime() {
+function updateFloatingTime() {
+  const timeEl = document.getElementById('floating-time');
+  if (!timeEl) return;
+
   const now = new Date();
+  let hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
 
-  const timeEl = document.getElementById('time');
-  const dateEl = document.getElementById('date');
+  hours = hours % 12 || 12; // convert 0 to 12 for 12-hour format
+  const timeString = `${hours}:${minutes} ${ampm}`;
 
-  const currentTime = formatTime(now);
-  const currentDate = formatDate(now);
-
-  // Update time only if changed and animate
-  if (currentTime !== prevTime) {
-    timeEl.textContent = currentTime;
-    animateChange(timeEl);
-    prevTime = currentTime;
-  }
-
-  // Update date only if changed and animate
-  if (currentDate !== prevDate) {
-    dateEl.textContent = currentDate;
-    animateChange(dateEl);
-    prevDate = currentDate;
-  }
+  timeEl.textContent = timeString;
 }
 
-// Initial call
-updateTime();
-
-// Update every second
-setInterval(updateTime, 1000);
+// Initial call and update every minute
+updateFloatingTime();
+setInterval(updateFloatingTime, 60 * 1000);
 // Skills animation
 function animateSkills() {
   const skills = document.querySelectorAll('.skill-fill');
