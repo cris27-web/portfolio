@@ -193,3 +193,31 @@ function checkSkillsAnimation() {
 
 window.addEventListener('scroll', checkSkillsAnimation);
 window.addEventListener('load', checkSkillsAnimation);
+
+const navLinks = document.querySelectorAll('#side-nav ul li a');
+const sections = Array.from(navLinks).map(link => document.querySelector(link.getAttribute('href')));
+
+function onScroll() {
+  const scrollPos = window.scrollY + window.innerHeight / 2; // middle of viewport
+
+  sections.forEach((section, index) => {
+    if (section.offsetTop <= scrollPos && (section.offsetTop + section.offsetHeight) > scrollPos) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      navLinks[index].classList.add('active');
+    }
+  });
+}
+
+window.addEventListener('scroll', onScroll);
+
+// Optional: Smooth scroll behavior for nav links
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+

@@ -295,5 +295,93 @@ header #theme-toggle {
     height: 14px;
   }
 }
+#side-nav {
+  position: fixed;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  z-index: 1000;
+}
+
+#side-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#side-nav ul li {
+  margin: 1rem 0;
+}
+
+#side-nav ul li a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  display: block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#side-nav ul li a:hover {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+#side-nav ul li a.active {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+#about, #skills, #projects, #contact {
+  padding: 4rem 1rem;
+  scroll-margin-top: 80px;
+}
+
+#contact {
+  text-align: center;
+  margin: 3rem 0;
+}
+#contact h3 {
+  color: var(--accent-color);
+  margin-bottom: 1.5rem;
+}
+#contact .social-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+}
+#contact .social-links li a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--accent-color-dark);
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+#contact .social-links li a i {
+  font-size: 24px;
+  color: var(--accent-color-dark);
+  transition: color 0.3s ease;
+}
+#contact .social-links li a:hover, #contact .social-links li a:focus {
+  color: var(--accent-color);
+  outline: none;
+}
+#contact .social-links li a:hover i, #contact .social-links li a:focus i {
+  color: var(--accent-color);
+}
+
+.section-title {
+  color: var(--accent-color);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
 
 /*# sourceMappingURL=main.css.map */
