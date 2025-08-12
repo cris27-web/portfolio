@@ -3,44 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Your Name | Portfolio</title>
+  <title>Cristian Simut | Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles/main.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
 </head>
 <body>
 
   <header>
-    <h1>Cristian Simut
-    </h1>
+    <h1>Cristian Simut</h1>
     <h2 id="tagline">Web Developer & Designer</h2>
+    <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">🌙</button>
   </header>
-
-  <section id="about">
-    <h3>About Me</h3>
-    <p>Hello! I’m starting my portfolio site. Stay tuned!</p>
+  
+<div class="container">
+  <section id="time-display">
+    <h3>Current Time & Date</h3>
+    <div id="time" aria-live="polite"></div>
+    <div id="date" aria-live="polite"></div>
   </section>
 
-  <section id="projects">
-  <h3>My Projects</h3>
-  <div class="project-list">
-    <div class="project-card">
-      <h4>Project One</h4>
-      <p>A cool project description goes here.</p>
-      <a href="#" target="_blank" rel="noopener noreferrer">View Code</a>
+  <section id="about">
+  <h3>About Me</h3>
+  <p>
+    Hi, I’m Cristian Simut — a 24-year-old web developer originally from Romania, now based in the UK.<br>
+    I’m passionate about crafting clean, minimalistic designs that focus on user experience and functionality.<br>
+    I enjoy writing efficient, maintainable code and turning ideas into beautiful, responsive websites.<br>
+    When I’m not coding, I love exploring new design trends and refining my skills to create elegant, modern digital experiences.
+  </p>
+</section>
+
+<section id="skills">
+  <h3>My Skills</h3>
+  <div class="skill">
+    <span class="skill-name"><i class="fab fa-html5"></i> HTML</span>
+    <div class="skill-bar">
+      <div class="skill-fill" data-fill="95%"></div>
     </div>
-    <div class="project-card">
-      <h4>Project Two</h4>
-      <p>A second project description.</p>
-      <a href="#" target="_blank" rel="noopener noreferrer">View Code</a>
+  </div>
+  <div class="skill">
+    <span class="skill-name"><i class="fab fa-css3-alt"></i> CSS</span>
+    <div class="skill-bar">
+      <div class="skill-fill" data-fill="75%"></div>
     </div>
-    <div class="project-card">
-      <h4>Project Three</h4>
-      <p>Another project you want to showcase.</p>
-      <a href="#" target="_blank" rel="noopener noreferrer">View Code</a>
+  </div>
+  <div class="skill">
+    <span class="skill-name"><i class="fab fa-js-square"></i> JavaScript</span>
+    <div class="skill-bar">
+      <div class="skill-fill" data-fill="55%"></div>
+    </div>
+  </div>
+  <div class="skill">
+    <span class="skill-name"><i class="fab fa-react"></i> React</span>
+    <div class="skill-bar">
+      <div class="skill-fill" data-fill="25%"></div>
     </div>
   </div>
 </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="scripts/main.js"></script>
+  <section id="projects">
+    <h3>My Projects</h3>
+    <div class="project-list">
+      <div class="project-card">
+        <h4>Personal Portfolio</h4>
+        <p>My personal portfolio</p>
+        <a href="#" target="_blank" rel="noopener noreferrer">View Code</a>
+      </div>
+      <div class="project-card">
+        <h4>Project Two</h4>
+        <p>A second project description.</p>
+        <a href="#" target="_blank" rel="noopener noreferrer">View Code</a>
+      </div>
+      <div class="project-card">
+        <h4>Project Three</h4>
+        <p>Another project you want to showcase.</p>
+        <a href="#" target="_blank" rel="noopener noreferrer">View Code</a>
+      </div>
+    </div>
+  </section>
+
+
+  
+  </div>
+
+  <button id="back-to-top" title="Back to top">↑</button>
+
+  <script src="scripts/main.js"></script>
 </body>
 </html>

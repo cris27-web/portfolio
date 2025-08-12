@@ -1,0 +1,328 @@
+/* CSS Variables for easy theming */
+:root {
+  --bg-color: #2c2c2b;            /* Dark brown-orange background */
+  --text-color: #f5e8c7;          /* Soft cream text */
+  --accent-color: #ffb01c;        /* Bright orange accent */
+  --accent-color-dark: #9c711f;   /* Darker burnt orange */
+  --font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-size-base: 16px;
+  --font-size-large: 2rem;
+  --font-size-medium: 1.25rem;
+  --font-size-small: 0.9rem;
+
+  --line-height-base: 1.6;
+  --line-height-heading: 1.2;
+
+  /* Light mode colors */
+  --bg-color-light: #fef8e7;       /* Light cream */
+  --text-color-light: #4a2c00;     /* Dark brown */
+  --accent-color-light: #ff9c1a;   /* Warm orange for light mode */
+  --accent-color-dark-light: #b36b00; /* Darker orange for light mode */
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  margin: 0;
+  padding: 2rem;
+
+  &.light-mode {
+    background-color: var(--bg-color-light);
+    color: var(--text-color-light);
+
+    h2,
+    .project-card h4,
+    .project-card a {
+      color: var(--accent-color-light);
+    }
+
+    .project-card {
+      background: #fff5d9;
+      box-shadow: 0 0 10px rgba(255, 156, 26, 0.2);
+
+      &:hover {
+        box-shadow: 0 12px 20px rgba(255, 156, 26, 0.5);
+      }
+    }
+
+    #back-to-top {
+      background: var(--accent-color-light);
+      color: var(--text-color-light);
+
+      &:hover {
+        background: var(--accent-color-dark-light);
+      }
+    }
+
+    #theme-toggle {
+      color: var(--accent-color-light);
+    }
+  }
+}
+
+/* Container for centralizing and max width */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h1 {
+    font-size: 3rem;
+    margin: 0;
+  }
+
+  h2 {
+    color: var(--accent-color);
+    font-weight: 300;
+    margin-top: 0.2rem;
+  }
+
+  #theme-toggle {
+    margin-left: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--accent-color);
+    transition: color 0.3s ease;
+  }
+}
+
+#projects {
+  margin-top: 4rem;
+
+  h3 {
+    color: var(--accent-color);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .project-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+
+    .project-card {
+      background: #4a3500;  /* Dark orange-brown */
+      border-radius: 10px;
+      padding: 1.5rem;
+      width: 280px;
+      box-shadow: 0 0 10px rgba(255, 176, 28, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 12px 20px rgba(255, 176, 28, 0.6);
+      }
+
+      &:focus-within {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 4px;
+      }
+
+      h4 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        color: var(--accent-color);
+        text-align: center;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #f5e8c7;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      a {
+        display: block;
+        margin: 0 auto;
+        background: var(--accent-color);
+        color: #3d2e0f;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 700;
+        transition: background 0.3s ease, color 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+
+        &:hover {
+          background: var(--accent-color-dark);
+          color: #fff;
+        }
+
+        &:focus {
+          outline: 2px solid var(--accent-color-dark);
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .project-list {
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      width: 90%;
+    }
+  }
+}
+
+#back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--accent-color);
+  color: #3d2e0f;
+  border: none;
+  padding: 0.7rem 1rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: var(--accent-color-dark);
+  }
+}
+
+#time-display {
+  text-align: center;
+  margin: 3rem 0;
+
+  h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+  }
+
+  #time {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-color-dark);
+  }
+
+  #date {
+    font-size: 1.2rem;
+    color: #cbb86e;
+    margin-top: 0.5rem;
+  }
+}
+
+#about {
+  background: rgba(255, 176, 28, 0.1);  /* subtle tinted background using accent color with transparency */
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(187, 127, 17, 0.2);
+  max-width: 700px;
+  margin: 3rem auto;  /* center horizontally */
+
+  h3 {
+    color: var(--accent-color);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+
+  p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+}
+
+#skills {
+  margin: 4rem 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+
+  h3 {
+    color: var(--accent-color);
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+
+  .skill {
+    margin-bottom: 1.5rem;
+
+    .skill-name {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-color);
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+
+      i {
+        color: var(--accent-color);
+        font-size: 1.3rem;
+        width: 20px;
+        text-align: center;
+      }
+    }
+
+    .skill-bar {
+      width: 100%;
+      background: #4a3500;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 18px;
+    }
+
+    .skill-fill {
+      background: var(--accent-color);
+      height: 100%;
+      width: 0; /* Start empty, animate to fill */
+      border-radius: 8px;
+      transition: width 1.5s ease-in-out;
+    }
+  }
+}
+
+/* Responsive: on smaller screens, scale font sizes slightly */
+@media (max-width: 480px) {
+  #skills {
+    max-width: 90%;
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    .skill {
+      .skill-name {
+        font-size: 1rem;
+
+        i {
+          font-size: 1.1rem;
+          width: 18px;
+        }
+      }
+
+      .skill-bar {
+        height: 14px;
+      }
+    }
+  }
+}
