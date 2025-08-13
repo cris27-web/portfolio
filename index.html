@@ -9,10 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles/main.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
 </head>
 <body>
-
+<div class="parallax-bg" aria-hidden="true">
+  <span class="blob b1" data-depth="0.08"></span>
+  <span class="blob b2" data-depth="0.14"></span>
+</div>
   <header>
     <h1>Cristian Simut</h1>
     <h2 id="tagline">Web Developer & Designer</h2>
@@ -70,28 +72,51 @@
 </section>
 
   <section id="projects">
-    <h3>My Projects</h3>
-    <div class="project-list">
-      <div class="project-card">
+  <h3 class="reveal-fade">My Projects</h3>
+  <div class="project-list">
+    <!-- Project 1 -->
+    <article class="project-card reveal-up">
+      <header class="project-header">
         <h4>Personal Portfolio</h4>
-        <div class="image-container">
-          <img src="images/tech-stack-infographic.png" alt="Project Tech Stack">
-        </div>
-        <p>My personal portfolio</p>
-        <a href="https://crisps.netlify.app/" class="btn" target="_blank" rel="noopener noreferrer">View Code</a>
+        <ul class="tags">
+          <li class="tag">HTML</li>
+          <li class="tag">SCSS</li>
+          <li class="tag">JavaScript</li>
+          <li class="tag">Anime.js</li>
+        </ul>
+      </header>
+      <p class="project-desc">
+        A minimalist, animated portfolio showcasing my work, skills and contact links.
+      </p>
+      <div class="project-actions">
+        <a class="btn btn-primary" href="https://your-live-demo-url" target="_blank" rel="noopener">Live Demo</a>
+        <a class="btn btn-ghost" href="https://github.com/yourusername/portfolio" target="_blank" rel="noopener">GitHub</a>
+        <button class="btn btn-outline open-modal" data-target="#project-1-modal">More Info</button>
       </div>
-      <div class="project-card">
+    </article>
+
+    <!-- Duplicate this block for Project 2/3… -->
+    <article class="project-card reveal-up">
+      <header class="project-header">
         <h4>Project Two</h4>
-        <p>A second project description.</p>
-        <a href="#" class="btn" target="_blank" rel="noopener noreferrer">View Code</a>
+        <ul class="tags">
+          <li class="tag">React</li>
+          <li class="tag">Vite</li>
+          <li class="tag">CSS</li>
+        </ul>
+      </header>
+      <p class="project-desc">
+        Short one-liner about what it does and why it’s cool.
+      </p>
+      <div class="project-actions">
+        <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Live Demo</a>
+        <a class="btn btn-ghost" href="#" target="_blank" rel="noopener">GitHub</a>
+        <button class="btn btn-outline open-modal" data-target="#project-2-modal">More Info</button>
       </div>
-      <div class="project-card">
-        <h4>Project Three</h4>
-        <p>Another project you want to showcase.</p>
-        <a href="#" class="btn" target="_blank" rel="noopener noreferrer">View Code</a>
-      </div>
-    </div>
-  </section>
+    </article>
+  </div>
+</section>
+
 
   <section id="contact">
   <h3 class ="section-title"> Contact Me</h3>
@@ -120,7 +145,51 @@
 </div>
 
   <button id="back-to-top" title="Back to top">↑</button>
+<!-- Modal for Project 1 -->
+<div id="project-1-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-dialog" role="document">
+    <button class="modal-close" aria-label="Close" data-close>&times;</button>
+    <h4>Personal Portfolio – Case Study</h4>
+    <div class="modal-grid">
+      <div>
+        <h5>Problem</h5>
+        <p>I needed a clean, branded portfolio to showcase projects, skills, and socials with subtle interactions.</p>
+      </div>
+      <div>
+        <h5>My Role</h5>
+        <p>Design, Frontend development, Animations, Theming.</p>
+      </div>
+      <div>
+        <h5>Tools</h5>
+        <ul class="tags">
+          <li class="tag">HTML</li>
+          <li class="tag">SCSS</li>
+          <li class="tag">JavaScript</li>
+          <li class="tag">Anime.js</li>
+          <li class="tag">Netlify</li>
+        </ul>
+      </div>
+      <div class="modal-actions">
+        <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
+        <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Modal for Project 2 (copy and change IDs/content/links) -->
+<div id="project-2-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-dialog" role="document">
+    <button class="modal-close" aria-label="Close" data-close>&times;</button>
+    <h4>Project Two – Case Study</h4>
+    <div class="modal-grid">
+      <!-- same structure as above -->
+    </div>
+  </div>
+</div>
+<canvas id="fireworks-canvas" aria-hidden="true"></canvas>
   <script src="scripts/main.js"></script>
 </body>
 </html>

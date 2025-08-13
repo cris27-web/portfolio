@@ -30,24 +30,6 @@ anime.timeline()
     easing: 'easeOutExpo'
   }, '-=600'); // overlap by 600ms
 
-// Animate project cards fade & rise on page load
-anime({
-  targets: '.project-card',
-  translateY: [50, 0],
-  opacity: [0, 1],
-  delay: anime.stagger(200), // each card starts 200ms after previous
-  duration: 800,
-  easing: 'easeOutExpo'
-});
-
-// Initialize VanillaTilt on project cards
-VanillaTilt.init(document.querySelectorAll(".project-card"), {
-  max: 15,
-  speed: 400,
-  glare: true,
-  "max-glare": 0.2,
-});
-
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
@@ -255,4 +237,244 @@ document.addEventListener('DOMContentLoaded', () => {
     loop: true
   });
 });
+
+/* ---------- Reveal on scroll (IntersectionObserver) ---------- */
+(function initRevealOnScroll() {
+  const els = document.querySelectorAll('.reveal-up, .reveal-fade');
+  if (!('IntersectionObserver' in window) || els.length === 0) {
+    // Fallback: show immediately
+    els.forEach(el => el.classList.add('visible'));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  els.forEach(el => io.observe(el));
+})();
+
+/* ---------- Case study modals ---------- */
+(function initModals() {
+  function openModal(sel) {
+    const modal = document.querySelector(sel);
+    if (!modal) return;
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(modal) {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', (e) => {
+    const openBtn = e.target.closest('.open-modal');
+    if (openBtn) {
+      const target = openBtn.getAttribute('data-target');
+      if (target) openModal(target);
+    }
+    if (e.target.matches('[data-close]') || e.target.closest('[data-close]')) {
+      const modal = e.target.closest('.modal');
+      if (modal) closeModal(modal);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal.is-open').forEach(m => {
+        m.classList.remove('is-open');
+        document.body.style.overflow = '';
+      });
+    }
+  });
+})();
+
+/* ---------- Light parallax background ---------- */
+(function initParallax() {
+  const blobs = document.querySelectorAll('.parallax-bg .blob');
+  if (!blobs.length) return;
+
+  const onScroll = () => {
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+    blobs.forEach(blob => {
+      const depth = parseFloat(blob.dataset.depth || '0.1');
+      // subtle move (slower than scroll): positive translates down, feels “deeper”
+      blob.style.transform = `translateY(${y * depth}px)`;
+    });
+  };
+
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+/* ---------- Konami Code Easter Egg → Fireworks ---------- */
+// Sequence: up up down down left right left right b a
+const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiPos = 0;
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === konamiSeq[konamiPos]) {
+    konamiPos++;
+    if (konamiPos === konamiSeq.length) {
+      konamiPos = 0;
+      triggerFireworks();
+    }
+  } else {
+    konamiPos = 0; // reset if wrong key
+  }
+});
+
+function triggerFireworks() {
+  const canvas = document.getElementById('fireworks-canvas');
+  const ctx = canvas.getContext('2d');
+  let W = window.innerWidth;
+  let H = window.innerHeight;
+  canvas.width = W;
+  canvas.height = H;
+
+  // Make canvas overlay transparent & clickable-through if needed
+  canvas.style.position = 'fixed';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.pointerEvents = 'none';
+  canvas.style.zIndex = '9999';
+
+  const fireworks = [];
+  const particles = [];
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  class Firework {
+    constructor(x, y, targetY, color) {
+      this.x = x;
+      this.y = y;
+      this.targetY = targetY;
+      this.color = color;
+      this.speed = 3;
+      this.radius = 2;
+    }
+    update() {
+      this.y -= this.speed;
+      if (this.y <= this.targetY) {
+        this.explode();
+        return true; // remove
+      }
+      return false;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+    explode() {
+      const count = 32;
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle(this.x, this.y, this.color));
+      }
+    }
+  }
+
+  class Particle {
+    constructor(x, y, color) {
+      this.x = x;
+      this.y = y;
+      this.color = color;
+      this.speed = random(1, 5);
+      this.angle = random(0, Math.PI * 2);
+      this.alpha = 1;
+      this.decay = random(0.015, 0.03);
+      this.radius = 2;
+    }
+    update() {
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed + 0.3; // gravity
+      this.alpha -= this.decay;
+      return this.alpha <= 0;
+    }
+    draw() {
+      ctx.globalAlpha = this.alpha;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  let animationId;
+  function animate() {
+    animationId = requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, W, H); // Transparent clear
+
+    if (Math.random() < 0.05) {
+      const x = random(100, W - 100);
+      const y = H;
+      const targetY = random(150, H / 2);
+      const color = `hsl(${Math.floor(random(0, 360))}, 100%, 60%)`;
+      fireworks.push(new Firework(x, y, targetY, color));
+    }
+
+    for (let i = fireworks.length - 1; i >= 0; i--) {
+      if (fireworks[i].update()) {
+        fireworks.splice(i, 1);
+      } else {
+        fireworks[i].draw();
+      }
+    }
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      if (particles[i].update()) {
+        particles.splice(i, 1);
+      } else {
+        particles[i].draw();
+      }
+    }
+  }
+
+  // Add class for blob animations
+  document.body.classList.add('fireworks-active');
+
+  animate();
+
+  // Stop fireworks after 6 seconds
+  setTimeout(() => {
+    cancelAnimationFrame(animationId);
+    ctx.clearRect(0, 0, W, H);
+    document.body.classList.remove('fireworks-active');
+  }, 6000);
+}
+// Animation trigger for About Me
+document.addEventListener("DOMContentLoaded", () => {
+  const aboutSection = document.querySelector("#about");
+
+  if (aboutSection) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          aboutSection.classList.add("fade-in");
+        }
+      });
+    }, { threshold: 0.2 });
+
+    observer.observe(aboutSection);
+  }
+});
+// Mobile nav toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.querySelector(".hamburger");
+  const navLinks = document.querySelector(".nav-links");
+
+  hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
+  });
+});
+
 
