@@ -351,6 +351,11 @@ header #theme-toggle {
   color: #fff;
 }
 
+@media (max-width: 768px) {
+  #side-nav {
+    display: none;
+  }
+}
 #about, #skills, #projects, #contact {
   padding: 4rem 1rem;
   scroll-margin-top: 80px;
