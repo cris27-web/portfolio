@@ -16,6 +16,9 @@
   --text-color-light: #4a2c00; /* Dark brown */
   --accent-color-light: #ff9c1a; /* Warm orange for light mode */
   --accent-color-dark-light: #b36b00; /* Darker orange for light mode */
+  --card-bg: #4a3500;
+  --accent-hover: #9c711f;
+  --text-secondary: #e0cfa2;
 }
 
 body {
@@ -35,13 +38,24 @@ body.light-mode h2,
 body.light-mode .project-card h4,
 body.light-mode .project-card a {
   color: var(--accent-color-light);
+  font-size: 1.3rem;
+  font-weight: 700; /* Optional: make it bolder */
+  margin-bottom: 0.5rem; /* Optional: adjust spacing */
 }
 body.light-mode .project-card {
   background: #fff5d9;
   box-shadow: 0 0 10px rgba(255, 156, 26, 0.2);
+  color: var(--text-color-light);
 }
-body.light-mode .project-card:hover {
-  box-shadow: 0 12px 20px rgba(255, 156, 26, 0.5);
+body.light-mode .project-card p {
+  color: var(--text-color-light);
+}
+body.light-mode .project-card .btn {
+  background: var(--accent-color-light);
+  color: var(--text-color-light);
+}
+body.light-mode .project-card .btn:hover {
+  background: var(--accent-color-dark-light);
 }
 body.light-mode #back-to-top {
   background: var(--accent-color-light);
@@ -99,54 +113,49 @@ header #theme-toggle {
   gap: 2rem;
   justify-content: center;
 }
-#projects .project-list .project-card {
-  background: #4a3500; /* Dark orange-brown */
+#projects .project-card {
+  background: var(--card-bg);
+  padding: 1rem;
   border-radius: 10px;
-  padding: 1.5rem;
-  width: 280px;
-  box-shadow: 0 0 10px rgba(255, 176, 28, 0.3);
+  text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
 }
-#projects .project-list .project-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 12px 20px rgba(255, 176, 28, 0.6);
+#projects .project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-#projects .project-list .project-card:focus-within {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 4px;
+#projects .project-card h3 {
+  margin-top: 1rem;
+  font-size: 1.25rem;
 }
-#projects .project-list .project-card h4 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: var(--accent-color);
-  text-align: center;
+#projects .project-card p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
 }
-#projects .project-list .project-card p {
-  font-size: 0.9rem;
-  color: #f5e8c7;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-#projects .project-list .project-card a {
-  display: block;
-  margin: 0 auto;
-  background: var(--accent-color);
-  color: #3d2e0f;
+#projects .project-card .btn {
+  display: inline-block;
+  margin-top: 0.75rem;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-weight: 700;
-  transition: background 0.3s ease, color 0.3s ease;
+  background: var(--accent-color);
+  color: white;
+  border-radius: 5px;
   text-decoration: none;
-  text-align: center;
+  transition: background 0.3s ease;
 }
-#projects .project-list .project-card a:hover {
-  background: var(--accent-color-dark);
-  color: #fff;
+#projects .project-card .btn:hover {
+  background: var(--accent-hover);
 }
-#projects .project-list .project-card a:focus {
-  outline: 2px solid var(--accent-color-dark);
-  outline-offset: 2px;
+#projects .project-card .image-container {
+  overflow: hidden;
+  border-radius: 8px;
+}
+#projects .project-card .image-container img {
+  width: 100%;
+  display: block;
+  transition: transform 0.4s ease;
+}
+#projects .project-card .image-container:hover img {
+  transform: scale(1.05);
 }
 @media (max-width: 600px) {
   #projects .project-list {
@@ -382,6 +391,17 @@ header #theme-toggle {
   font-size: 2rem;
   margin-bottom: 2rem;
   text-align: center;
+}
+
+header h1 span {
+  display: inline-block;
+  will-change: transform;
+}
+
+#projects .project-card h4 {
+  font-size: 1.75rem; /* Change this value as needed */
+  font-weight: 700; /* Optional: make it bolder */
+  margin-bottom: 0.5rem; /* Optional: adjust spacing */
 }
 
 /*# sourceMappingURL=main.css.map */

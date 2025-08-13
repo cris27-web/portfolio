@@ -220,4 +220,39 @@ navLinks.forEach(link => {
     }
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  // Select the h1 inside header
+  const heading = document.querySelector('header h1');
+
+  // Split text into chars and clear original text
+  const chars = heading.textContent.split('');
+  heading.textContent = '';
+
+  // Wrap each char in a span
+  chars.forEach(char => {
+    const span = document.createElement('span');
+    span.textContent = char;
+    heading.appendChild(span);
+  });
+
+  // Select all spans to animate
+  const charSpans = heading.querySelectorAll('span');
+
+  // Anime.js animation
+  anime({
+    targets: charSpans,
+    y: [
+      { value: '-2.75rem', easing: 'easeOutExpo', duration: 600 },
+      { value: 0, easing: 'easeOutBounce', duration: 800, delay: 100 }
+    ],
+    rotate: {
+      value: '-1turn',
+      delay: 0
+    },
+    delay: anime.stagger(50),
+    easing: 'easeInOutCirc',
+    loopDelay: 1000,
+    loop: true
+  });
+});
 

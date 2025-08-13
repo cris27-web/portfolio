@@ -18,6 +18,10 @@
   --text-color-light: #4a2c00;     /* Dark brown */
   --accent-color-light: #ff9c1a;   /* Warm orange for light mode */
   --accent-color-dark-light: #b36b00; /* Darker orange for light mode */
+
+  --card-bg: #4a3500;
+  --accent-hover: #9c711f;
+  --text-secondary: #e0cfa2;
 }
 
 body {
@@ -37,14 +41,26 @@ body {
     .project-card h4,
     .project-card a {
       color: var(--accent-color-light);
+      font-size: 1.3rem;
+      font-weight: 700; /* Optional: make it bolder */
+      margin-bottom: 0.5rem; /* Optional: adjust spacing */ 
     }
 
     .project-card {
       background: #fff5d9;
       box-shadow: 0 0 10px rgba(255, 156, 26, 0.2);
+      color: var(--text-color-light);
 
-      &:hover {
-        box-shadow: 0 12px 20px rgba(255, 156, 26, 0.5);
+      p {
+        color: var(--text-color-light);
+      }
+      .btn {
+        background: var(--accent-color-light);
+        color: var(--text-color-light);
+
+        &:hover {
+          background: var(--accent-color-dark-light);
+        }
       }
     }
 
@@ -111,61 +127,57 @@ header {
     flex-wrap: wrap;
     gap: 2rem;
     justify-content: center;
+  }
 
-    .project-card {
-      background: #4a3500;  /* Dark orange-brown */
-      border-radius: 10px;
-      padding: 1.5rem;
-      width: 280px;
-      box-shadow: 0 0 10px rgba(255, 176, 28, 0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
+  .project-card {
+    background: var(--card-bg);
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h3 {
+      margin-top: 1rem;
+      font-size: 1.25rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent-color);
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background 0.3s ease;
 
       &:hover {
-        transform: translateY(-8px) scale(1.03);
-        box-shadow: 0 12px 20px rgba(255, 176, 28, 0.6);
+        background: var(--accent-hover);
       }
+    }
 
-      &:focus-within {
-        outline: 2px solid var(--accent-color);
-        outline-offset: 4px;
-      }
+    .image-container {
+      overflow: hidden;
+      border-radius: 8px;
 
-      h4 {
-        margin-top: 0;
-        margin-bottom: 0.5rem;
-        color: var(--accent-color);
-        text-align: center;
-      }
-
-      p {
-        font-size: 0.9rem;
-        color: #f5e8c7;
-        margin-bottom: 1rem;
-        text-align: center;
-      }
-
-      a {
+      img {
+        width: 100%;
         display: block;
-        margin: 0 auto;
-        background: var(--accent-color);
-        color: #3d2e0f;
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        font-weight: 700;
-        transition: background 0.3s ease, color 0.3s ease;
-        text-decoration: none;
-        text-align: center;
+        transition: transform 0.4s ease;
+      }
 
-        &:hover {
-          background: var(--accent-color-dark);
-          color: #fff;
-        }
-
-        &:focus {
-          outline: 2px solid var(--accent-color-dark);
-          outline-offset: 2px;
-        }
+      &:hover img {
+        transform: scale(1.05);
       }
     }
   }
@@ -216,7 +228,7 @@ header {
   font-size: 1.1rem;
   padding: 0.4rem 0.8rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   user-select: none;
   z-index: 10000;
   opacity: 0.8;
@@ -430,4 +442,13 @@ header {
   font-size: 2rem;
   margin-bottom: 2rem;
   text-align: center;
+}
+header h1 span {
+  display: inline-block;
+  will-change: transform;
+}
+#projects .project-card h4 {
+  font-size: 1.75rem; /* Change this value as needed */
+  font-weight: 700;  /* Optional: make it bolder */
+  margin-bottom: 0.5rem; /* Optional: adjust spacing */
 }
