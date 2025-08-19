@@ -312,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
+
 /* ---------- Konami Code Easter Egg → Fireworks ---------- */
 // Sequence: up up down down left right left right b a
 const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
@@ -476,5 +477,6 @@ document.addEventListener("DOMContentLoaded", () => {
     navLinks.classList.toggle("open");
   });
 });
+
 
 
