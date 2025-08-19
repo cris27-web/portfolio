@@ -148,33 +148,86 @@ function updateFloatingTime() {
 // Initial call and update every minute
 updateFloatingTime();
 setInterval(updateFloatingTime, 60 * 1000);
-// Skills animation
+// Skills animation (updated: width + count-up + aria)
 function animateSkills() {
   const skills = document.querySelectorAll('.skill-fill');
+
+  // Don't animate if user prefers reduced motion
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   skills.forEach(skill => {
-    const fillWidth = skill.getAttribute('data-fill');
-    skill.style.width = fillWidth;
+    const raw = (skill.getAttribute('data-fill') || '0%').trim();
+    const target = parseInt(raw.replace('%',''), 10) || 0;
+
+    // set width (CSS handles transition)
+    if (!reduce) {
+      // trigger reflow to ensure transition when element becomes visible
+      // (use requestAnimationFrame to separate style writes)
+      requestAnimationFrame(() => {
+        skill.style.width = target + '%';
+      });
+    } else {
+      skill.style.width = target + '%';
+    }
+
+    // animate numeric counter
+    const percentEl = skill.querySelector('.percent');
+    if (!percentEl) return;
+
+    // If already animated, skip
+    if (skill.dataset.animated === 'true') {
+      // ensure aria reflects final value
+      skill.setAttribute('aria-valuenow', String(target));
+      percentEl.textContent = target + '%';
+      return;
+    }
+
+    skill.dataset.animated = 'true';
+    const duration = reduce ? 0 : 900; // ms
+    const start = performance.now();
+    const startValue = 0;
+
+    function step(now) {
+      const elapsed = now - start;
+      const progress = duration ? Math.min(elapsed / duration, 1) : 1;
+      const value = Math.round(startValue + (target - startValue) * progress);
+      percentEl.textContent = value + '%';
+      skill.setAttribute('aria-valuenow', String(value));
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        // ensure exact final
+        percentEl.textContent = target + '%';
+        skill.setAttribute('aria-valuenow', String(target));
+      }
+    }
+
+    requestAnimationFrame(step);
   });
 }
 
-function isInViewport(element) {
-  const rect = element.getBoundingClientRect();
-  return (
-    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.bottom >= 0
-  );
+// ---------- helper: is element in viewport ----------
+function isInViewport(el, offset = 0) {
+  if (!el) return false;
+  const rect = el.getBoundingClientRect();
+  return rect.top <= (window.innerHeight || document.documentElement.clientHeight) - offset
+      && rect.bottom >= 0 + offset;
 }
 
+// Trigger skills animation when skills section becomes visible (reuse existing logic)
 function checkSkillsAnimation() {
   const skillsSection = document.getElementById('skills');
-  if (!skillsSection.classList.contains('animated') && isInViewport(skillsSection)) {
+  if (!skillsSection) return;
+  if (!skillsSection.classList.contains('animated') && isInViewport(skillsSection, 40)) {
     animateSkills();
     skillsSection.classList.add('animated');
   }
 }
 
+// ensure the check runs early and also when images/fonts finish layout
 window.addEventListener('scroll', checkSkillsAnimation);
 window.addEventListener('load', checkSkillsAnimation);
+document.addEventListener('DOMContentLoaded', checkSkillsAnimation);
 
 const navLinks = document.querySelectorAll('#side-nav ul li a');
 const sections = Array.from(navLinks).map(link => document.querySelector(link.getAttribute('href')));
@@ -463,7 +516,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// ...existing code...
 const aboutSection = document.getElementById('about');
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {

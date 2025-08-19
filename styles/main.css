@@ -1,23 +1,22 @@
-/* CSS Variables for easy theming */
-/* -----------------------------------------------------------
-   THEME VARIABLES (grey palette)
-   ----------------------------------------------------------- */
+@charset "UTF-8";
+/* ------------ THEME: grey palette (dark / light) ------------- */
 :root {
-  --bg-color: #121316;
-  --surface: #1f2022;
-  --surface-2: #2a2b2d;
-  --muted: #9ea3a8;
-  --text-color: #ffffff;
-  --text-secondary: #cfcfcf;
-
-  --accent-color: #bdbdbd;
-  --accent-color-dark: #8f9092;
-  --accent-gradient: linear-gradient(135deg,#2b2b2d 0%,#6b6b6d 100%);
-
+  /* primary greys */
+  --bg-color: #121316; /* deep dark grey (page bg) */
+  --surface: #1f2022; /* surface / cards / nav */
+  --surface-2: #2a2b2d; /* secondary surface (slightly lighter) */
+  --muted: #9ea3a8; /* muted / subtle text */
+  --text-color: #ffffff; /* main text */
+  --text-secondary: #cfcfcf; /* secondary text */
+  /* accent = neutral greys & gradient */
+  --accent-color: #bdbdbd; /* light grey accent */
+  --accent-color-dark: #8f9092; /* darker grey for hover */
+  --accent-gradient: linear-gradient(135deg, #2b2b2d 0%, #6b6b6d 100%);
+  /* compatibility / legacy mappings (keep old var names used in code) */
   --background-color: var(--bg-color);
   --card-bg: var(--surface);
   --accent-hover: var(--accent-color-dark);
-
+  /* typography */
   --font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   --font-size-base: 16px;
   --font-size-large: 2rem;
@@ -25,7 +24,7 @@
   --font-size-small: 0.9rem;
   --line-height-base: 1.6;
   --line-height-heading: 1.2;
-
+  /* light-mode overrides (keeps neutral greys but lighter) */
   --bg-color-light: #f3f4f6;
   --text-color-light: #1f1f1f;
   --accent-color-light: #9a9a9a;
@@ -55,6 +54,7 @@ body.light-mode .project-card a {
 }
 body.light-mode .project-card {
   background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   color: var(--text-color-light);
 }
 body.light-mode .project-card p {
@@ -108,19 +108,11 @@ header #theme-toggle {
   transition: color 0.3s ease;
 }
 
-#projects {
-  margin-top: 4rem;
-}
-#projects h3 {
-  color: var(--accent-color);
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-}
+/* ===== Projects: card layout (media + content) ===== */
 #projects .project-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 #projects .project-card {
   display: grid;
@@ -139,35 +131,26 @@ header #theme-toggle {
   object-fit: cover;
   border-radius: 8px;
   display: block;
-  border: 1px solid rgba(255,255,255,0.03);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+#projects .project-card .project-content .project-header h4 {
+  margin-bottom: 0.35rem;
 }
 #projects .project-card .project-content .project-desc {
   color: var(--text-secondary);
   margin-bottom: 0.8rem;
 }
-#projects .project-card:hover {
-  box-shadow: 0 18px 36px rgba(0,0,0,0.6);
+#projects .project-card .project-content .project-actions {
+  margin-top: 0.25rem;
 }
-#projects .project-card .project-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-#projects .project-card .project-header h4 {
-  margin: 0;
-  color: var(--accent-color);
-  font-size: 1.15rem;
-}
-#projects .project-card .project-desc {
-  margin: 0.75rem 0 1rem;
-  color: #f5e8c7;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-#projects .project-card .project-actions {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
+@media (max-width: 720px) {
+  #projects .project-card {
+    grid-template-columns: 1fr;
+  }
+  #projects .project-card .project-media img {
+    height: 140px;
+    border-radius: 10px;
+  }
 }
 
 #back-to-top {
@@ -221,10 +204,10 @@ header #theme-toggle {
   font-weight: bold;
 }
 
-/* About Me Section - Minimalist Card */
+/* ========= About section — professional layout ========= */
 #about {
   padding: 4rem 0;
-  opacity: 0;
+  opacity: 0; /* start hidden for animation */
   transform: translateY(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
@@ -251,13 +234,13 @@ header #theme-toggle {
   height: 160px;
   object-fit: cover;
   border-radius: 12px;
-  border: 2px solid rgba(255,255,255,0.04);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  border: 2px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 #about .about-media img:hover {
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
 }
 #about .about-body {
   color: var(--text-color);
@@ -267,12 +250,12 @@ header #theme-toggle {
   font-size: 2rem;
   color: var(--accent-color);
 }
-.lead {
+#about .lead {
   margin: 0 0 1rem 0;
   color: var(--text-secondary);
   font-size: 1.05rem;
 }
-.about-highlights {
+#about .about-highlights {
   margin: 0 0 1rem 0;
   padding: 0;
   list-style: none;
@@ -280,31 +263,31 @@ header #theme-toggle {
   gap: 1rem;
   flex-wrap: wrap;
 }
-.about-highlights li {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.03);
+#about .about-highlights li {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.03);
   padding: 0.45rem 0.7rem;
   border-radius: 999px;
   font-weight: 600;
   color: var(--text-secondary);
   font-size: 0.9rem;
 }
-.about-actions {
+#about .about-actions {
   display: flex;
   gap: 0.75rem;
   margin: 0.75rem 0 0.5rem 0;
 }
-.about-actions .btn-primary {
+#about .about-actions .btn-primary {
   background: linear-gradient(90deg, var(--accent-color), var(--accent-color-dark));
   color: var(--text-color);
   border: 0;
 }
-.about-actions .btn-ghost {
+#about .about-actions .btn-ghost {
   background: transparent;
   color: var(--accent-color);
-  border: 1px solid rgba(255,255,255,0.04);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
-.about-extra {
+#about .about-extra {
   margin-top: 0.75rem;
   color: var(--muted);
   font-size: 0.95rem;
@@ -318,10 +301,10 @@ header #theme-toggle {
     width: 120px;
     height: 120px;
   }
-  .about-highlights {
+  #about .about-highlights {
     justify-content: center;
   }
-  .about-actions {
+  #about .about-actions {
     justify-content: center;
   }
 }
@@ -332,6 +315,8 @@ header #theme-toggle {
   margin-left: auto;
   margin-right: auto;
   padding: 0 1rem;
+  /* make the percent visible even if fill is small by showing the percentage outside */
+  /* prefer reduced motion: disable shimmer and hover lifts */
 }
 #skills h3 {
   color: var(--accent-color);
@@ -341,6 +326,13 @@ header #theme-toggle {
 }
 #skills .skill {
   margin-bottom: 1.5rem;
+  /* subtle lift on hover for desktop */
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  will-change: transform;
+  /* percent label inside the fill */
+}
+#skills .skill:hover {
+  transform: translateY(-4px);
 }
 #skills .skill .skill-name {
   display: flex;
@@ -358,8 +350,8 @@ header #theme-toggle {
   text-align: center;
 }
 #skills .skill .skill-bar {
-  background: var(--surface-2);
   width: 100%;
+  background: var(--surface-2);
   border-radius: 8px;
   overflow: hidden;
   height: 18px;
@@ -372,6 +364,10 @@ header #theme-toggle {
   transition: width 1.5s ease-in-out;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.6rem; /* room for percent */
 }
 #skills .skill .skill-fill::after {
   content: "";
@@ -381,11 +377,35 @@ header #theme-toggle {
   height: 100%;
   width: 60%;
   max-width: 220px;
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 100%);
   transform: translateX(-100%);
   animation: shimmer 2.2s ease-in-out infinite;
   pointer-events: none;
   mix-blend-mode: overlay;
+}
+#skills .skill .percent {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--bg-color); /* dark text on light fill */
+  background: transparent;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0.98;
+  transform: translateY(0);
+  transition: color 200ms ease, transform 200ms ease;
+}
+#skills .skill .skill-fill[style*="width: 0"] .percent {
+  color: var(--text-secondary);
+}
+@media (prefers-reduced-motion: reduce) {
+  #skills .skill {
+    transition: none;
+    transform: none;
+  }
+  #skills .skill-fill::after {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 /* Responsive: on smaller screens, scale font sizes slightly */
@@ -558,18 +578,18 @@ header h1 span {
 .btn-ghost {
   background: transparent;
   color: var(--accent-color);
-  border-color: rgba(255, 176, 28, 0.4);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 .btn-ghost:hover {
   border-color: var(--accent-color);
   color: var(--accent-color);
-  background: rgba(255, 176, 28, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--text-color);
-  border-color: rgba(255, 176, 28, 0.35);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 .btn-outline:hover {
   border-color: var(--accent-color);
@@ -590,8 +610,8 @@ header h1 span {
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   font-size: 0.8rem;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   color: var(--accent-color);
 }
 
@@ -621,7 +641,7 @@ header h1 span {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 176, 28, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .modal-close {
@@ -801,12 +821,18 @@ nav {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(255, 176, 28, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 #contact-sidebar .social-links li a:hover, #contact-sidebar .social-links li a:focus {
   color: var(--accent-color);
-  background: rgba(255, 176, 28, 0.18);
+  background: rgba(255, 255, 255, 0.18);
   outline: none;
+}
+
+@media (max-width: 768px) {
+  #contact-sidebar {
+    display: none;
+  }
 }
 
 /*# sourceMappingURL=main.css.map */

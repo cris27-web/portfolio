@@ -352,6 +352,14 @@ header {
   .skill {
     margin-bottom: 1.5rem;
 
+    /* subtle lift on hover for desktop */
+    transition: transform 220ms ease, box-shadow 220ms ease;
+    will-change: transform;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
     .skill-name {
       display: flex;
       align-items: center;
@@ -387,6 +395,11 @@ header {
       position: relative;
       overflow: hidden;
 
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 0.6rem; /* room for percent */
+
       &::after {
         content: "";
         position: absolute;
@@ -402,6 +415,30 @@ header {
         mix-blend-mode: overlay;
       }
     }
+
+    /* percent label inside the fill */
+    .percent {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--bg-color); /* dark text on light fill */
+      background: transparent;
+      line-height: 1;
+      pointer-events: none;
+      opacity: 0.98;
+      transform: translateY(0);
+      transition: color 200ms ease, transform 200ms ease;
+    }
+  }
+
+  /* make the percent visible even if fill is small by showing the percentage outside */
+  .skill .skill-fill[style*="width: 0"] .percent {
+    color: var(--text-secondary);
+  }
+
+  /* prefer reduced motion: disable shimmer and hover lifts */
+  @media (prefers-reduced-motion: reduce) {
+    .skill { transition: none; transform: none; }
+    .skill-fill::after { animation: none; opacity: 0; }
   }
 }
 
