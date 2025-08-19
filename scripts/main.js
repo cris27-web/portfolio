@@ -452,22 +452,7 @@ function triggerFireworks() {
     document.body.classList.remove('fireworks-active');
   }, 6000);
 }
-// Animation trigger for About Me
-document.addEventListener("DOMContentLoaded", () => {
-  const aboutSection = document.querySelector("#about");
 
-  if (aboutSection) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          aboutSection.classList.add("fade-in");
-        }
-      });
-    }, { threshold: 0.2 });
-
-    observer.observe(aboutSection);
-  }
-});
 // Mobile nav toggle
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.querySelector(".hamburger");
@@ -478,5 +463,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// ...existing code...
+const aboutSection = document.getElementById('about');
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    aboutSection.classList.add('fade-in');
+  }, 300);
+});
 
 

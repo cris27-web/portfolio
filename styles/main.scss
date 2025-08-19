@@ -1,27 +1,37 @@
-/* CSS Variables for easy theming */
+/* ------------ THEME: grey palette (dark / light) ------------- */
 :root {
-  --bg-color: #2c2c2b;            /* Dark brown-orange background */
-  --text-color: #f5e8c7;          /* Soft cream text */
-  --accent-color: #ffb01c;        /* Bright orange accent */
-  --accent-color-dark: #9c711f;   /* Darker burnt orange */
+  /* primary greys */
+  --bg-color: #121316;          /* deep dark grey (page bg) */
+  --surface: #1f2022;           /* surface / cards / nav */
+  --surface-2: #2a2b2d;         /* secondary surface (slightly lighter) */
+  --muted: #9ea3a8;             /* muted / subtle text */
+  --text-color: #ffffff;        /* main text */
+  --text-secondary: #cfcfcf;    /* secondary text */
+
+  /* accent = neutral greys & gradient */
+  --accent-color: #bdbdbd;     /* light grey accent */
+  --accent-color-dark: #8f9092;/* darker grey for hover */
+  --accent-gradient: linear-gradient(135deg, #2b2b2d 0%, #6b6b6d 100%);
+
+  /* compatibility / legacy mappings (keep old var names used in code) */
+  --background-color: var(--bg-color);
+  --card-bg: var(--surface);
+  --accent-hover: var(--accent-color-dark);
+
+  /* typography */
   --font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-size-base: 16px;
   --font-size-large: 2rem;
   --font-size-medium: 1.25rem;
   --font-size-small: 0.9rem;
-
   --line-height-base: 1.6;
   --line-height-heading: 1.2;
 
-  /* Light mode colors */
-  --bg-color-light: #fef8e7;       /* Light cream */
-  --text-color-light: #4a2c00;     /* Dark brown */
-  --accent-color-light: #ff9c1a;   /* Warm orange for light mode */
-  --accent-color-dark-light: #b36b00; /* Darker orange for light mode */
-
-  --card-bg: #4a3500;
-  --accent-hover: #9c711f;
-  --text-secondary: #e0cfa2;
+  /* light-mode overrides (keeps neutral greys but lighter) */
+  --bg-color-light: #f3f4f6;
+  --text-color-light: #1f1f1f;
+  --accent-color-light: #9a9a9a;
+  --accent-color-dark-light: #6f6f6f;
 }
 
 body {
@@ -47,8 +57,8 @@ body {
     }
 
     .project-card {
-      background: #fff5d9;
-      box-shadow: 0 0 10px rgba(255, 156, 26, 0.2);
+      background: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
       color: var(--text-color-light);
 
       p {
@@ -129,16 +139,16 @@ header {
   }
 
   .project-card {
-    background: #4a3500; /* card background that matches your palette */
-    border: 1px solid rgba(255,176,28,.2);
+    background: var(--card-bg); /* was hard-coded brown */
+    border: 1px solid rgba(255,255,255,0.04); /* subtle border */
     border-radius: 12px;
     padding: 1.2rem;
-    box-shadow: 0 2px 10px rgba(255,176,28,.15);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.55);
     transition: transform .25s ease, box-shadow .25s ease;
 
     &:hover {
       transform: translateY(-6px);
-      box-shadow: 0 12px 24px rgba(255,176,28,.35);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.6);
     }
 
     .project-header {
@@ -312,7 +322,7 @@ header {
 
     .skill-bar {
       width: 100%;
-      background: #4a3500;
+      background: var(--surface-2);
       border-radius: 8px;
       overflow: hidden;
       height: 18px;
@@ -498,14 +508,14 @@ header h1 span {
 .btn-ghost {
   background: transparent;
   color: var(--accent-color);
-  border-color: rgba(255,176,28,.4);
-  &:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(255,176,28,.08); }
+  border-color: rgba(255,255,255,.4);
+  &:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(255,255,255,.08); }
 }
 
 .btn-outline {
   background: transparent;
   color: var(--text-color);
-  border-color: rgba(255,176,28,.35);
+  border-color: rgba(255,255,255,.35);
   &:hover { border-color: var(--accent-color); color: var(--accent-color); }
 }
 
@@ -522,8 +532,8 @@ header h1 span {
   padding: .25rem .6rem;
   border-radius: 999px;
   font-size: .8rem;
-  background: rgba(255,176,28,.12);
-  border: 1px solid rgba(255,176,28,.35);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
   color: var(--accent-color);
 }
 
@@ -539,7 +549,7 @@ header h1 span {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 20px 60px rgba(0,0,0,.5);
-  border: 1px solid rgba(255,176,28,.2);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 .modal-close {
   position: absolute;
@@ -572,7 +582,7 @@ header h1 span {
   max-width: 520px; max-height: 520px;
   border-radius: 50%;
   filter: blur(50px);
-  opacity: 0.12;
+  opacity: 0.08;
   background: radial-gradient(circle at 30% 30%, var(--accent-color), transparent 60%);
 }
 .blob.b1 { top: -10%; left: -8%; }
@@ -696,12 +706,12 @@ nav {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: rgba(255,176,28,0.08);
+      background: rgba(255,255,255,0.08);
 
       &:hover,
       &:focus {
         color: var(--accent-color);
-        background: rgba(255,176,28,0.18);
+        background: rgba(255,255,255,0.18);
         outline: none;
       }
     }
