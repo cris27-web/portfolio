@@ -16,7 +16,7 @@
   <span class="blob b2" data-depth="0.14"></span>
 </div>
   <header>
-    <h1>Cristian Simut</h1>
+    <h1>CrisDevs</h1>
     <h2 id="tagline">Web Developer & Designer
       <!-- subtle hint near the tagline -->
       <span class="easter-hint" data-hint="Try arrow keys or the hidden controller on mobile">Hint</span>
@@ -51,7 +51,7 @@
         </ul>
 
         <div class="about-actions">
-          <a class="btn btn-primary" href="mailto:hello@yourdomain.com">Email Me</a>
+          <a class="btn btn-primary" href="mailto:cristian.simut@yahoo.com">Email Me</a>
           <a class="btn btn-ghost" href="assets/Cristian-Simut-CV.pdf" download>Download CV</a>
         </div>
 
@@ -100,13 +100,13 @@
   <h3 class="reveal-fade">My Projects <span class="easter-hint" data-hint="It's a classic code — listen for the rhythm"></span></h3>
   <div class="project-list">
     <!-- Project 1 -->
-    <article class="project-card reveal-up">
+    <article class="project-card reveal-up" role="article" aria-labelledby="proj-1-title">
       <div class="project-media">
-        <img src="./images/PP.png" alt="Personal Portfolio screenshot" />
+        <img class="project-thumb" loading="lazy" src="./images/PP.png" alt="Personal Portfolio screenshot" />
       </div>
       <div class="project-content">
         <header class="project-header">
-          <h4>Personal Portfolio</h4>
+          <h4 id="proj-1-title">Personal Portfolio</h4>
           <ul class="tags">
             <li class="tag">HTML</li>
             <li class="tag">SCSS</li>
@@ -126,38 +126,38 @@
     </article>
 
     <!-- Project 2 -->
-    <article class="project-card reveal-up">
+    <article class="project-card reveal-up" role="article" aria-labelledby="proj-2-title">
       <div class="project-media">
-        <img src="./images/project-2-thumb.png" alt="Project Two screenshot" />
+        <img class="project-thumb" loading="lazy" src="./images/kurless.png" alt="KurlessACM screenshot"/>
       </div>
       <div class="project-content">
         <header class="project-header">
-          <h4>Project Two</h4>
+          <h4 id="proj-2-title">KurlessACM</h4>
           <ul class="tags">
-            <li class="tag">React</li>
-            <li class="tag">Vite</li>
+            <li class="tag">HTML</li>
             <li class="tag">CSS</li>
+            <li class="tag">JavaScript</li>
           </ul>
         </header>
         <p class="project-desc">
-          Short one-liner about what it does and why it’s cool.
+          E-commerce website for KurlessACM, featuring a clean design and smooth interactions.
         </p>
         <div class="project-actions">
-          <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Live Demo</a>
-          <a class="btn btn-ghost" href="#" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
+          <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener">GitHub</a>
           <button class="btn btn-outline open-modal" data-target="#project-2-modal">More Info</button>
         </div>
       </div>
     </article>
 
     <!-- Project 3 -->
-    <article class="project-card reveal-up">
+    <article class="project-card reveal-up" role="article" aria-labelledby="proj-3-title">
       <div class="project-media">
-        <img src="./images/project-3-thumb.png" alt="Project Three screenshot" />
+        <img class="project-thumb" loading="lazy" src="./images/project-3-thumb.png" alt="Project Three screenshot" />
       </div>
       <div class="project-content">
         <header class="project-header">
-          <h4>Project Three</h4>
+          <h4 id="proj-3-title">Project Three</h4>
           <ul class="tags">
             <li class="tag">React</li>
             <li class="tag">Vite</li>
@@ -176,13 +176,13 @@
     </article>
 
     <!-- Project 4 -->
-    <article class="project-card reveal-up">
+    <article class="project-card reveal-up" role="article" aria-labelledby="proj-4-title">
       <div class="project-media">
-        <img src="./images/project-4-thumb.png" alt="Project Four screenshot" />
+        <img class="project-thumb" loading="lazy" src="./images/project-4-thumb.png" alt="Project Four screenshot" />
       </div>
       <div class="project-content">
         <header class="project-header">
-          <h4>Project Four</h4>
+          <h4 id="proj-4-title">Project Four</h4>
           <ul class="tags">
             <li class="tag">React</li>
             <li class="tag">Vite</li>
@@ -214,11 +214,6 @@
       <li>
         <a class="social-btn" href="https://github.com/cris27-web" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
           <i class="fab fa-github" aria-hidden="true"></i>
-        </a>
-      </li>
-      <li>
-        <a class="social-btn" href="https://www.instagram.com/__.cristiansimut/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
-          <i class="fab fa-instagram" aria-hidden="true"></i>
         </a>
       </li>
     </ul>
@@ -269,29 +264,30 @@
   <div class="modal-backdrop" data-close></div>
   <div class="modal-dialog" role="document">
     <button class="modal-close" aria-label="Close" data-close>&times;</button>
-    <h4>Project Two – Case Study</h4>
+    <h4>E-commerce Website</h4>
     <div class="modal-grid">
             <div>
         <h5>Problem</h5>
-        <p>I needed a clean, branded portfolio to showcase projects, skills, and socials with subtle interactions.</p>
+        <p>I needed a clean, branded e-commerce website to showcase products with subtle interactions.</p>
       </div>
       <div>
         <h5>My Role</h5>
-        <p>Design, Frontend development, Animations, Theming.</p>
+        <p>End-to-end developer, handling design, coding, backend functions, and deployment</p>
       </div>
       <div>
         <h5>Tools</h5>
         <ul class="tags">
           <li class="tag">HTML</li>
-          <li class="tag">SCSS</li>
+          <li class="tag">CSS</li>
           <li class="tag">JavaScript</li>
-          <li class="tag">Anime.js</li>
+          <li class="tag">Git</li>
+          <li class="tag">Batchscript</li>
           <li class="tag">Netlify</li>
         </ul>
       </div>
       <div class="modal-actions">
-        <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
-        <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
+        <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener">GitHub</a>
       </div>
       <!-- same structure as above -->
     </div>

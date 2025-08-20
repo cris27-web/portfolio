@@ -287,37 +287,64 @@ document.addEventListener('DOMContentLoaded', () => {
   els.forEach(el => io.observe(el));
 })();
 
-/* ---------- Case study modals ---------- */
+/* ---------- Case study modals (improved) ---------- */
 (function initModals() {
   function openModal(sel) {
     const modal = document.querySelector(sel);
     if (!modal) return;
     modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-  }
-  function closeModal(modal) {
-    modal.classList.remove('is-open');
-    document.body.style.overflow = '';
+
+    const dlg = modal.querySelector('.modal-dialog');
+    if (dlg) {
+      // trigger CSS entrance
+      requestAnimationFrame(() => dlg.classList.add('open-anim'));
+      // focus first focusable element for accessibility
+      const focusable = dlg.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusable) focusable.focus();
+      else {
+        dlg.setAttribute('tabindex', '-1');
+        dlg.focus();
+      }
+    }
   }
 
+  function closeModal(modal) {
+    if (!modal) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+
+    const dlg = modal.querySelector('.modal-dialog');
+    if (dlg) dlg.classList.remove('open-anim');
+  }
+
+  // Use a capturing click listener to ensure modal open/close is handled before other handlers
   document.addEventListener('click', (e) => {
     const openBtn = e.target.closest('.open-modal');
     if (openBtn) {
+      e.preventDefault();
+      e.stopPropagation();
       const target = openBtn.getAttribute('data-target');
       if (target) openModal(target);
+      return;
     }
+
+    // close when clicking elements marked with [data-close] (backdrop / close buttons)
     if (e.target.matches('[data-close]') || e.target.closest('[data-close]')) {
+      e.preventDefault();
+      e.stopPropagation();
       const modal = e.target.closest('.modal');
       if (modal) closeModal(modal);
+      return;
     }
-  });
+  }, true);
 
+  // Close on Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      document.querySelectorAll('.modal.is-open').forEach(m => {
-        m.classList.remove('is-open');
-        document.body.style.overflow = '';
-      });
+      document.querySelectorAll('.modal.is-open').forEach(m => closeModal(m));
     }
   });
 })();
@@ -620,17 +647,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Replace duplicated about fade-in calls with an animated trigger that respects prefers-reduced-motion
 const aboutSection = document.getElementById('about');
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   setTimeout(() => {
-    aboutSection.classList.add('fade-in');
+    if (aboutSection) aboutSection.classList.add('fade-in');
+    // if user prefers reduced motion, skip staggered animate but still ensure content visible
+    if (!aboutSection) return;
+    if (reduce) {
+      aboutSection.classList.add('animate'); // keep visible without motion
+      return;
+    }
+    // small delay so CSS transitions (fade-in) begin before animate
+    setTimeout(() => {
+      aboutSection.classList.add('animate');
+    }, 180);
   }, 300);
 });
-window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    aboutSection.classList.add('fade-in');
-  }, 300);
-});
+
 function openKonamiMobile() {
   if (!konamiMobile) return;
   konamiMobile.classList.add('open');
@@ -775,29 +810,95 @@ document.addEventListener('click', (ev) => {
   document.addEventListener('touchstart', onTouchStart, {passive:true});
   document.addEventListener('touchend', onTouchEnd, {passive:true});
 })();
-  function onTouchEnd(e) {
-    // If touchend has changedTouches, use last known clientX/Y
-    const touch = (e.changedTouches && e.changedTouches[0]) || null;
-    if (!touch) return;
-    const dx = touch.clientX - startX;
-    const dy = touch.clientY - startY;
-    const dt = Date.now() - startTime;
-    if (dt > timeLimit) return; // too slow for a swipe
-    if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return; // not enough movement
 
-    // Determine primary direction
-    if (Math.abs(dx) > Math.abs(dy)) {
-      if (dx > 0) handleKonamiKey('ArrowRight');
-      else handleKonamiKey('ArrowLeft');
-    } else {
-      if (dy > 0) handleKonamiKey('ArrowDown');
-      else handleKonamiKey('ArrowUp');
+/* ---------- Card tilt (desktop) ---------- */
+(function initCardTilt() {
+  if (window.matchMedia && window.matchMedia('(pointer: fine)').matches === false) return; // desktop only
+  const cards = document.querySelectorAll('.project-card');
+  if (!cards.length) return;
+
+  cards.forEach(card => {
+    let raf = null;
+    let rect = null;
+    const intensity = 12; // max degrees
+
+    function onMove(e) {
+      if (!rect) rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width; // 0..1
+      const y = (e.clientY - rect.top) / rect.height; // 0..1
+      const rotateY = (x - 0.5) * (intensity * -1);
+      const rotateX = (y - 0.5) * (intensity);
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
     }
 
-    // show a visual token quickly (already done inside handleKonamiKey via showKeyToken)
-  }
+    function onLeave() {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        card.style.transform = '';
+      });
+    }
 
-  document.addEventListener('touchstart', onTouchStart, {passive:true});
-  document.addEventListener('touchend', onTouchEnd, {passive:true});
+    card.addEventListener('mousemove', onMove);
+    card.addEventListener('mouseleave', onLeave);
+    // keyboard/focus reset
+    card.addEventListener('blur', onLeave, true);
+    window.addEventListener('resize', () => rect = null);
+  });
+})();
+
+/* ---------- Button ripple effect ---------- */
+(function initButtonRipple() {
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn');
+    if (!btn) return;
+    // don't add ripples if reduced motion
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 1.2;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = `${size}px`;
+    const left = e.clientX - rect.left - size / 2;
+    const top = e.clientY - rect.top - size / 2;
+    ripple.style.left = `${left}px`;
+    ripple.style.top = `${top}px`;
+    btn.appendChild(ripple);
+
+    // cleanup after animation
+    setTimeout(() => {
+      ripple.remove();
+    }, 750);
+  }, { passive: true });
+})();
+
+/* ---------- Modal entrance class hookup (works with existing initModals) ---------- */
+/* Enhance openModal/closeModal by toggling .open-anim on the dialog.
+   We patch the existing click handler by observing modal open state changes.
+*/
+(function initModalAnimHook() {
+  const observer = new MutationObserver((entries) => {
+    entries.forEach(entry => {
+      const modal = entry.target;
+      if (modal.classList.contains('is-open')) {
+        const dlg = modal.querySelector('.modal-dialog');
+        if (dlg) {
+          // small timeout to ensure CSS transition triggers
+          requestAnimationFrame(() => dlg.classList.add('open-anim'));
+        }
+      } else {
+        const dlg = modal.querySelector('.modal-dialog');
+        if (dlg) dlg.classList.remove('open-anim');
+      }
+    });
+  });
+
+  document.querySelectorAll('.modal').forEach(m => {
+    observer.observe(m, { attributes: true, attributeFilter: ['class'] });
+  });
+})();
 
 

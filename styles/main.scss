@@ -42,6 +42,22 @@ body {
   line-height: var(--line-height-base);
   margin: 0;
   padding: 2rem;
+
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -3; /* behind .parallax-bg (which is z-index: -1) */
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(189,189,189,0.035), transparent 14%),
+      radial-gradient(circle at 80% 80%, rgba(143,144,146,0.025), transparent 14%),
+      linear-gradient(120deg, rgba(40,40,42,0.02), rgba(20,20,22,0.02));
+    background-size: 200% 200%, 200% 200%, 100% 100%;
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+    mix-blend-mode: screen;
+    animation: bgShift 18s linear infinite;
+  }
 }
 
 header {
@@ -72,27 +88,40 @@ header {
   .project-list {
     display: grid;
     gap: 1.6rem;
-
-    /* default: responsive columns that allow two columns when space permits */
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
 
   .project-card {
     display: grid;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: 1fr; /* mobile-first: stacked image above content */
     gap: 1rem;
     align-items: start;
     padding: 1rem;
     border-radius: 12px;
+    background: var(--card-bg); /* subtle surface background */
+    border: 1px solid rgba(255,255,255,0.03);
+
+    /* media (desktop): image left, content right */
+    @media (min-width: 900px) {
+      grid-template-columns: 220px 1fr;
+      align-items: center;
+    }
 
     .project-media {
-      flex: 0 0 120px;
-      img {
+      /* ensure thumbnail container keeps aspect ratio and image fills it */
+      width: 100%;
+      display: block;
+      overflow: hidden;
+      border-radius: 10px;
+
+      img.project-thumb {
+        display: block;
         width: 100%;
-        height: 80px;
+        height: auto;
+        aspect-ratio: 16 / 9;
         object-fit: cover;
         border-radius: 8px;
-        display: block;
+        max-height: 220px; /* cap height on desktop */
         border: 1px solid rgba(255,255,255,0.03);
       }
     }
@@ -100,34 +129,31 @@ header {
     .project-content {
       .project-header h4 { margin-bottom: 0.35rem; }
       .project-desc { color: var(--text-secondary); margin-bottom: 0.8rem; }
-      .project-actions { margin-top: 0.25rem; }
-    }
 
-    /* Force a two-column layout on wider viewports so projects arrange 2x2 on desktop */
-    @media (min-width: 980px) {
-      .project-list {
-        grid-template-columns: repeat(2, 1fr);
+      /* make action buttons line up horizontally and wrap on small screens */
+      .project-actions {
+        display: flex;
+        gap: 0.6rem;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 0.25rem;
       }
     }
 
     @media (max-width: 720px) {
-      grid-template-columns: 1fr;
-      .project-media img { height: 140px; border-radius: 10px; }
+      .project-media img.project-thumb { height: 180px; }
     }
   }
 
   /* Reserve space for the fixed left nav on wider screens so content doesn't slide under it */
   @media (min-width: 900px) {
-    margin-left: 110px; /* adjust if your side-nav is wider/narrower */
+    margin-left: 110px;
   }
 
-  /* Make screenshots more visible on desktop */
+  /* Force two-column grid on wide viewports */
   @media (min-width: 980px) {
-    .project-card {
-      .project-media {
-        img { height: 140px; } /* larger thumbnail on desktop */
-      }
-    }
+    .project-list { grid-template-columns: repeat(2, 1fr); }
+    .project-card .project-media img.project-thumb { max-height: 240px; }
   }
 }
 
@@ -304,7 +330,7 @@ header {
 
 #skills {
   margin: 4rem 0;
-  max-width: 600px;
+  max-width: 1000px; /* increased from 600px */
   margin-left: auto;
   margin-right: auto;
   padding: 0 1rem;
@@ -685,79 +711,114 @@ body.fireworks-active .blob {
     background: radial-gradient(circle at 30% 30%, hsl(50, 80%, 60%), transparent 60%);
   }
 }
-/* Add animation styles */
-.fade-slide-in {
+
+/* subtle animated background layer behind blobs */
+@keyframes bgShift {
+  0% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+  50% {
+    background-position: 20% 10%, 80% 90%, 50% 55%;
+  }
+  100% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+}
+
+/* slow floating + subtle rotation for the decorative blobs */
+@keyframes floatBlob {
+  0% { transform: translateY(0px) translateX(0px) scale(1) rotate(0deg); opacity: 0.08; }
+  25% { transform: translateY(-12px) translateX(8px) scale(1.03) rotate(-4deg); opacity: 0.09; }
+  50% { transform: translateY(6px) translateX(-6px) scale(0.99) rotate(2deg); opacity: 0.075; }
+  75% { transform: translateY(-6px) translateX(6px) scale(1.02) rotate(-2deg); opacity: 0.085; }
+  100% { transform: translateY(0px) translateX(0px) scale(1) rotate(0deg); opacity: 0.08; }
+}
+
+/* Project card interactive polish */
+.project-card {
+  /* preserve existing layout */
+  transform-style: preserve-3d;
+  transition: transform 350ms cubic-bezier(.2,.9,.2,1), box-shadow 350ms ease;
+  will-change: transform, box-shadow;
+
+  /* subtle lift on hover */
+  &:hover {
+    box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+  }
+
+  /* image hover zoom */
+  .project-media img.project-thumb {
+    transition: transform 420ms ease, box-shadow 420ms ease;
+  }
+  &:hover .project-media img.project-thumb {
+    transform: scale(1.04) translateZ(0);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  }
+}
+
+/* Tags: small pop animation when parent reveal shows */
+@keyframes tagPop {
+  0% { opacity: 0; transform: translateY(8px) scale(.96); }
+  60% { opacity: 1; transform: translateY(-4px) scale(1.03); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.tags li {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transform: translateY(8px) scale(.96);
+}
+.reveal-up.visible .tags li,
+.reveal-fade.visible .tags li {
+  animation-name: tagPop;
+  animation-duration: 420ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(.2,.9,.25,1);
+}
+.reveal-up.visible .tags li:nth-child(1) { animation-delay: 80ms; }
+.reveal-up.visible .tags li:nth-child(2) { animation-delay: 160ms; }
+.reveal-up.visible .tags li:nth-child(3) { animation-delay: 240ms; }
+.reveal-up.visible .tags li:nth-child(4) { animation-delay: 320ms; }
+.reveal-up.visible .tags li:nth-child(5) { animation-delay: 400ms; }
+
+/* Button ripple base */
+.btn {
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  pointer-events: none;
+  background: rgba(255,255,255,0.18);
+  animation: rippleAnim 650ms ease-out;
+  will-change: transform, opacity;
+}
+@keyframes rippleAnim {
+  to { transform: scale(6); opacity: 0; }
 }
 
-.fade-slide-in.visible {
+/* Modal open animation (dialog) */
+.modal-dialog {
+  transform-origin: center top;
+  transition: transform 380ms cubic-bezier(.2,.9,.2,1), opacity 300ms ease;
+  opacity: 0;
+  transform: translateY(8px) scale(.98);
+}
+.modal.is-open .modal-dialog.open-anim {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--text-color);
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  gap: 5px;
-}
-
-.hamburger span {
-  height: 3px;
-  width: 25px;
-  background: var(--text-color);
-  border-radius: 5px;
-}
-
-@media (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-
-  .nav-links {
-    position: absolute;
-    top: 70px;
-    right: 0;
-    background: var(--background-color);
-    flex-direction: column;
-    width: 200px;
-    padding: 1rem;
-    gap: 1rem;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-  }
-
-  .nav-links.open {
-    transform: translateX(0);
-  }
-}
+/* Restore the #contact-sidebar block so the social buttons are fixed on the right and hidden on small screens */
 #contact-sidebar {
   position: fixed;
   top: 50%;
-  right: 25px;
+  right: 25px;            /* place on the right side */
   transform: translateY(-50%);
   background: transparent;
   z-index: 1001;
-  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  padding: 0.5rem;
 
   .social-links {
     display: flex;
@@ -791,7 +852,101 @@ nav {
 }
 
 @media (max-width: 768px) {
-  #contact-sidebar {
-    display: none;
+  #contact-sidebar { display: none; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-media img.project-thumb,
+  .tags li,
+  .btn .ripple,
+  .modal-dialog {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Ensure tags inside modals are visible (global .tags li default is hidden for reveal animation) */
+.modal .tags li {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* Optional: animate modal tags when dialog opens */
+.modal.is-open .tags li {
+  animation-name: tagPop;
+  animation-duration: 420ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(.2,.9,.25,1);
+}
+.modal.is-open .tags li:nth-child(1) { animation-delay: 60ms; }
+.modal.is-open .tags li:nth-child(2) { animation-delay: 120ms; }
+.modal.is-open .tags li:nth-child(3) { animation-delay: 180ms; }
+.modal.is-open .tags li:nth-child(4) { animation-delay: 240ms; }
+.modal.is-open .tags li:nth-child(5) { animation-delay: 300ms; }
+/* About section micro-animations */
+@keyframes aboutAvatarIn {
+  0% { transform: translateY(14px) scale(.98); opacity: 0; filter: blur(6px); }
+  60% { transform: translateY(-6px) scale(1.02); opacity: 1; filter: blur(2px); }
+  100% { transform: translateY(0) scale(1); opacity: 1; filter: blur(0); }
+}
+
+@keyframes aboutLeadIn {
+  0% { transform: translateY(18px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes aboutBadgePop {
+  0% { transform: translateY(8px) scale(.96); opacity: 0; }
+  60% { transform: translateY(-6px) scale(1.03); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Triggered when About becomes visible; JS will add .animate to #about */
+#about.animate {
+  .about-media img {
+    will-change: transform, opacity, filter;
+    animation: aboutAvatarIn 760ms cubic-bezier(.2,.9,.2,1) both;
+  }
+
+  .lead {
+    will-change: transform, opacity;
+    animation: aboutLeadIn 560ms cubic-bezier(.2,.9,.25,1) both;
+    animation-delay: 120ms;
+  }
+
+  .about-highlights li {
+    opacity: 0;
+    transform: translateY(8px) scale(.96);
+  }
+  /* stagger badges */
+  .about-highlights li:nth-child(1) { animation: aboutBadgePop 420ms cubic-bezier(.2,.9,.25,1) both 180ms; }
+  .about-highlights li:nth-child(2) { animation: aboutBadgePop 420ms cubic-bezier(.2,.9,.25,1) both 240ms; }
+  .about-highlights li:nth-child(3) { animation: aboutBadgePop 420ms cubic-bezier(.2,.9,.25,1) both 300ms; }
+  .about-highlights li:nth-child(4) { animation: aboutBadgePop 420ms cubic-bezier(.2,.9,.25,1) both 360ms; }
+  .about-highlights li:nth-child(5) { animation: aboutBadgePop 420ms cubic-bezier(.2,.9,.25,1) both 420ms; }
+
+  /* small desc subtle fade if present */
+  .about-extra {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: aboutLeadIn 520ms ease both;
+    animation-delay: 380ms;
+  }
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  #about.animate,
+  #about.animate .about-media img,
+  #about.animate .lead,
+  #about.animate .about-highlights li,
+  #about.animate .about-extra {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
   }
 }
