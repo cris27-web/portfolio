@@ -56,31 +56,6 @@ backToTop.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Dark / Light mode toggle with localStorage
-const themeToggle = document.getElementById('theme-toggle');
-const body = document.body;
-
-// Load saved theme from localStorage
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'light') {
-  body.classList.add('light-mode');
-  themeToggle.textContent = '☀️';
-} else {
-  themeToggle.textContent = '🌙';
-}
-
-themeToggle.addEventListener('click', () => {
-  body.classList.toggle('light-mode');
-
-  if (body.classList.contains('light-mode')) {
-    themeToggle.textContent = '☀️';
-    localStorage.setItem('theme', 'light');
-  } else {
-    themeToggle.textContent = '🌙';
-    localStorage.setItem('theme', 'dark');
-  }
-});
-
 function animateChange(el) {
   anime.timeline()
     .add({
@@ -366,32 +341,73 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 
-/* ---------- Konami Code Easter Egg → Fireworks ---------- */
+/* ---------- Konami Code (visual + sequence handling + improved fireworks) ---------- */
 // Sequence: up up down down left right left right b a
 const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 let konamiPos = 0;
+let konamiActive = false; // true after first correct key
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === konamiSeq[konamiPos]) {
-    konamiPos++;
-    if (konamiPos === konamiSeq.length) {
-      konamiPos = 0;
-      triggerFireworks();
-    }
-  } else {
-    konamiPos = 0; // reset if wrong key
-  }
-});
+// optional overlay elements — guard in case markup is missing
+const overlay = document.getElementById('konami-overlay');
+const keySeqEl = overlay ? overlay.querySelector('.key-sequence') : null;
+const konamiMsg = overlay ? overlay.querySelector('.konami-msg') : null;
 
+// nice printable labels for keys
+const keyLabel = {
+  'ArrowUp': '↑',
+  'ArrowDown': '↓',
+  'ArrowLeft': '←',
+  'ArrowRight': '→',
+  'b': 'B',
+  'a': 'A'
+};
+
+// show a token for a pressed key (no-op if overlay/keySeqEl missing)
+function showKeyToken(keyName, ok = true) {
+  if (!overlay || !keySeqEl) return;
+  overlay.classList.add('visible');
+  const token = document.createElement('span');
+  token.className = 'key-token';
+  if (!ok) token.style.opacity = '0.6';
+  token.textContent = keyLabel[keyName] || keyName.toUpperCase();
+  keySeqEl.appendChild(token);
+
+  // pulse animation
+  requestAnimationFrame(() => token.classList.add('pulse'));
+  setTimeout(() => token.classList.remove('pulse'), 260);
+
+  // keep only last N tokens (N = sequence length)
+  const max = konamiSeq.length;
+  while (keySeqEl.children.length > max) keySeqEl.removeChild(keySeqEl.firstChild);
+}
+
+// clear tokens and message (safe when overlay missing)
+function clearKonamiVisuals(delay = 0) {
+  if (!overlay || !keySeqEl || !konamiMsg) return;
+  setTimeout(() => {
+    keySeqEl.innerHTML = '';
+    overlay.classList.remove('show-msg','success','visible');
+    konamiMsg.textContent = '';
+  }, delay);
+}
+
+// show message in overlay (safe when konamiMsg missing)
+function showKonamiMessage(text, short = true) {
+  if (!konamiMsg || !overlay) return;
+  konamiMsg.textContent = text;
+  overlay.classList.add('show-msg');
+  if (short) setTimeout(() => overlay.classList.remove('show-msg'), 1100);
+}
+
+/* ---------- improved fireworks function unchanged (uses DOM canvas if present) ---------- */
 function triggerFireworks() {
   const canvas = document.getElementById('fireworks-canvas');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let W = window.innerWidth;
   let H = window.innerHeight;
   canvas.width = W;
   canvas.height = H;
-
-  // Make canvas overlay transparent & clickable-through if needed
   canvas.style.position = 'fixed';
   canvas.style.top = '0';
   canvas.style.left = '0';
@@ -401,110 +417,198 @@ function triggerFireworks() {
   const fireworks = [];
   const particles = [];
 
-  function random(min, max) {
-    return Math.random() * (max - min) + min;
-  }
+  function rand(min, max) { return Math.random() * (max - min) + min; }
 
   class Firework {
     constructor(x, y, targetY, color) {
-      this.x = x;
-      this.y = y;
-      this.targetY = targetY;
-      this.color = color;
-      this.speed = 3;
-      this.radius = 2;
+      this.x = x; this.y = y; this.targetY = targetY; this.color = color;
+      this.speed = rand(5, 9);
+      this.radius = rand(2,4);
+      this.vx = rand(-1.2,1.2);
     }
     update() {
       this.y -= this.speed;
-      if (this.y <= this.targetY) {
+      this.x += this.vx * 0.6;
+      this.speed *= 0.99;
+      if (this.y <= this.targetY || this.speed < 1.4) {
         this.explode();
-        return true; // remove
+        return true;
       }
       return false;
     }
     draw() {
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       ctx.fillStyle = this.color;
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
       ctx.fill();
     }
     explode() {
-      const count = 32;
-      for (let i = 0; i < count; i++) {
-        particles.push(new Particle(this.x, this.y, this.color));
-      }
+      const count = Math.floor(rand(40, 80));
+      for (let i=0;i<count;i++) particles.push(new Particle(this.x, this.y, this.color));
     }
   }
 
   class Particle {
     constructor(x, y, color) {
-      this.x = x;
-      this.y = y;
-      this.color = color;
-      this.speed = random(1, 5);
-      this.angle = random(0, Math.PI * 2);
+      this.x = x; this.y = y; this.color = color;
+      this.speed = rand(1,7);
+      this.angle = rand(0, Math.PI*2);
       this.alpha = 1;
-      this.decay = random(0.015, 0.03);
-      this.radius = 2;
+      this.decay = rand(0.008, 0.03);
+      this.radius = rand(1,3.5);
+      this.vx = Math.cos(this.angle) * this.speed;
+      this.vy = Math.sin(this.angle) * this.speed;
+      this.gravity = 0.06;
     }
     update() {
-      this.x += Math.cos(this.angle) * this.speed;
-      this.y += Math.sin(this.angle) * this.speed + 0.3; // gravity
+      this.vy += this.gravity;
+      this.x += this.vx;
+      this.y += this.vy;
       this.alpha -= this.decay;
       return this.alpha <= 0;
     }
     draw() {
-      ctx.globalAlpha = this.alpha;
+      ctx.globalAlpha = Math.max(0, this.alpha);
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       ctx.fillStyle = this.color;
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
       ctx.fill();
       ctx.globalAlpha = 1;
     }
   }
 
-  let animationId;
+  // animation loop with trails: fade previous frame with low alpha rectangle
+  let animId;
   function animate() {
-    animationId = requestAnimationFrame(animate);
-    ctx.clearRect(0, 0, W, H); // Transparent clear
+    animId = requestAnimationFrame(animate);
 
-    if (Math.random() < 0.05) {
-      const x = random(100, W - 100);
-      const y = H;
-      const targetY = random(150, H / 2);
-      const color = `hsl(${Math.floor(random(0, 360))}, 100%, 60%)`;
-      fireworks.push(new Firework(x, y, targetY, color));
+    // fade out previous frame slightly (gives trails)
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter'; // additive for bright explosions
+
+    // launch occasional fireworks
+    if (Math.random() < 0.12) {
+      const x = rand(60, W - 60);
+      const targetY = rand(80, H * 0.45);
+      const color = `hsl(${Math.floor(rand(0,360))}, 85%, ${rand(45,65)}%)`;
+      fireworks.push(new Firework(x, H + 10, targetY, color));
     }
 
+    // update/draw fireworks
     for (let i = fireworks.length - 1; i >= 0; i--) {
-      if (fireworks[i].update()) {
-        fireworks.splice(i, 1);
-      } else {
-        fireworks[i].draw();
-      }
+      const fw = fireworks[i];
+      if (fw.update()) fireworks.splice(i,1);
+      else fw.draw();
     }
 
+    // update/draw particles
     for (let i = particles.length - 1; i >= 0; i--) {
-      if (particles[i].update()) {
-        particles.splice(i, 1);
-      } else {
-        particles[i].draw();
-      }
+      const p = particles[i];
+      if (p.update()) particles.splice(i,1);
+      else p.draw();
     }
   }
 
-  // Add class for blob animations
+  // visual pulse on blobs during fireworks
   document.body.classList.add('fireworks-active');
-
   animate();
 
-  // Stop fireworks after 6 seconds
+  // stop after a duration
   setTimeout(() => {
-    cancelAnimationFrame(animationId);
-    ctx.clearRect(0, 0, W, H);
+    cancelAnimationFrame(animId);
+    // quickly fade out particles
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(0,0,W,H);
+    ctx.clearRect(0,0,W,H);
     document.body.classList.remove('fireworks-active');
-  }, 6000);
+  }, 6500);
 }
+
+/* ---------- helper to process Konami input (keyboard only) ---------- */
+function handleKonamiKey(key) {
+  // normalize single-character keys to lowercase (a/b) while keeping arrows
+  const k = (key.length === 1) ? key.toLowerCase() : key;
+
+  if (k === konamiSeq[konamiPos]) {
+    if (!konamiActive) konamiActive = true;
+    showKeyToken(k, true);
+    konamiPos++;
+    if (konamiPos === konamiSeq.length) {
+      if (overlay) overlay.classList.add('success');
+      showKonamiMessage("Sequence complete! 🎆", true);
+      triggerFireworks();
+      setTimeout(() => clearKonamiVisuals(400), 1200);
+      konamiPos = 0;
+      konamiActive = false;
+    }
+  } else {
+    if (konamiActive) {
+      showKeyToken(k, false);
+      showKonamiMessage("You're close!", true);
+      konamiPos = 0;
+      konamiActive = false;
+      setTimeout(() => clearKonamiVisuals(600), 900);
+    } else {
+      // ignore stray input before sequence starts
+    }
+  }
+}
+
+/* ---------- Desktop-only keyboard listener ----------
+   Ignore keyboard Konami input on touch / small screens.
+*/
+document.addEventListener('keydown', (e) => {
+  const isTouchDevice = ('ontouchstart' in window) ||
+                        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+                        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isSmallScreen = window.innerWidth <= 720;
+  if (isTouchDevice || isSmallScreen) return;
+  handleKonamiKey(e.key);
+});
+
+// Keep hint click behavior simple (no mobile UI/timers)
+document.addEventListener('click', (ev) => {
+  const hint = ev.target.closest('.easter-hint');
+  if (!hint) return;
+  const text = hint.dataset.hint || 'Try arrow keys';
+  showKonamiMessage(text, true);
+});
+
+/* ---------- Minor safety: guard mobile nav toggle hookup ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.querySelector(".hamburger");
+  const navLinks = document.querySelector(".nav-links");
+  if (hamburger && navLinks) {
+    hamburger.addEventListener("click", () => {
+      navLinks.classList.toggle("open");
+    });
+  }
+});
+
+/* ---------- Image fallback: replace broken images with an inline SVG placeholder ---------- */
+(function initImageFallbacks() {
+  const placeholderSVG = encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" viewBox="0 0 600 320">
+      <rect width="100%" height="100%" fill="#2a2b2d"/>
+      <text x="50%" y="50%" fill="#9ea3a8" font-family="sans-serif" font-size="20" dominant-baseline="middle" text-anchor="middle">Image not found</text>
+    </svg>`
+  );
+  const dataUri = `data:image/svg+xml;utf8,${placeholderSVG}`;
+
+  // Attach a one-time error handler to all <img> so missing files show the placeholder
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('error', function onErr() {
+        this.removeEventListener('error', onErr);
+        this.src = dataUri;
+        this.classList.add('img--placeholder');
+      });
+    });
+  });
+})();
 
 // Mobile nav toggle
 document.addEventListener("DOMContentLoaded", () => {
@@ -522,5 +626,178 @@ window.addEventListener('DOMContentLoaded', () => {
     aboutSection.classList.add('fade-in');
   }, 300);
 });
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    aboutSection.classList.add('fade-in');
+  }, 300);
+});
+function openKonamiMobile() {
+  if (!konamiMobile) return;
+  konamiMobile.classList.add('open');
+  konamiMobile.setAttribute('aria-hidden', 'false');
+  konamiToggle.setAttribute('aria-expanded', 'true');
+  konamiToggle.classList.add('active');
+  // show overlay too so tokens/messages are visible
+  overlay.classList.add('visible');
+  // auto-hide after 12s of inactivity
+  clearTimeout(konamiAutoHideTimer);
+  konamiAutoHideTimer = setTimeout(closeKonamiMobile, 12000);
+}
+function closeKonamiMobile() {
+  if (!konamiMobile) return;
+  konamiMobile.classList.remove('open');
+  konamiMobile.setAttribute('aria-hidden', 'true');
+  konamiToggle.setAttribute('aria-expanded', 'false');
+  konamiToggle.classList.remove('active');
+  // optionally hide overlay tokens after short delay if none shown
+  clearTimeout(konamiAutoHideTimer);
+  konamiAutoHideTimer = setTimeout(() => {
+    if (keySeqEl.children.length === 0) overlay.classList.remove('visible');
+  }, 600);
+}
+if (konamiToggle) {
+  konamiToggle.addEventListener('click', () => {
+    if (konamiMobile && konamiMobile.classList.contains('open')) closeKonamiMobile();
+    else openKonamiMobile();
+  });
+}
+
+// reset auto-hide timer when user interacts with mobile buttons
+if (konamiMobile) {
+  konamiMobile.addEventListener('click', () => {
+    clearTimeout(konamiAutoHideTimer);
+    konamiAutoHideTimer = setTimeout(closeKonamiMobile, 12000);
+  });
+  konamiMobile.addEventListener('touchstart', () => {
+    clearTimeout(konamiAutoHideTimer);
+    konamiAutoHideTimer = setTimeout(closeKonamiMobile, 12000);
+  }, {passive:true});
+}
+
+// Hint badges: show short konami hint via overlay message when clicked
+document.addEventListener('click', (ev) => {
+  const hint = ev.target.closest('.easter-hint');
+  if (!hint) return;
+  const text = hint.dataset.hint || 'Try arrow keys or the hidden controller';
+  showKonamiMessage(text, true);
+  // briefly reveal overlay if hidden
+  overlay.classList.add('visible');
+  clearTimeout(konamiAutoHideTimer);
+  konamiAutoHideTimer = setTimeout(() => {
+    // keep overlay visible a short time for message, then hide if no tokens
+    if (keySeqEl.children.length === 0) overlay.classList.remove('visible');
+  }, 1800);
+});
+
+/* ---------- Mobile gestures + hotspots for Konami (swipe + quick taps) ---------- */
+// Create two small hotspots for B (left) and A (right) so mobile users can tap without opening controller
+(function initKonamiHotspots() {
+  if (!('ontouchstart' in window)) return; // only for touch devices
+
+  function makeHotspot(side, keyLabelChar, keyName) {
+    const el = document.createElement('button');
+    el.className = `konami-hotspot ${side}`;
+    el.setAttribute('aria-label', `Konami ${keyLabelChar}`);
+    el.innerHTML = `<span>${keyLabelChar}</span>`;
+    el.dataset.konamiKey = keyName;
+    // visual press handler
+    const flash = () => {
+      el.classList.add('active');
+      setTimeout(() => el.classList.remove('active'), 180);
+    };
+    el.addEventListener('click', (e) => { e.preventDefault(); flash(); handleKonamiKey(keyName); });
+    el.addEventListener('touchstart', (e) => { e.preventDefault(); flash(); handleKonamiKey(keyName); }, {passive:false});
+    document.body.appendChild(el);
+    return el;
+  }
+
+  // left -> B, right -> A
+  makeHotspot('left', 'B', 'b');
+  makeHotspot('right', 'A', 'a');
+
+  // optional: hide hotspots when konamiMobile is explicitly opened (so UI doesn't duplicate)
+  const mobilePanel = document.getElementById('konami-mobile');
+  const updateHotspotVisibility = () => {
+    const hotspots = document.querySelectorAll('.konami-hotspot');
+    if (mobilePanel && mobilePanel.classList.contains('open')) {
+      hotspots.forEach(h => h.style.display = 'none');
+    } else {
+      hotspots.forEach(h => h.style.display = (window.innerWidth <= 720 ? 'flex' : 'none'));
+    }
+  };
+  window.addEventListener('resize', updateHotspotVisibility);
+  document.addEventListener('DOMContentLoaded', updateHotspotVisibility);
+  // also toggle when panel changes
+  if (mobilePanel) {
+    const obs = new MutationObserver(updateHotspotVisibility);
+    obs.observe(mobilePanel, { attributes: true, attributeFilter: ['class'] });
+  }
+})();
+
+// Swipe detection anywhere on the page mapped to arrow keys
+(function initKonamiSwipes() {
+  if (!('ontouchstart' in window)) return; // only for touch devices
+
+  let startX = 0, startY = 0, startTime = 0;
+  const threshold = 30; // min px move to be considered swipe
+  const timeLimit = 700; // ms max for swipe
+
+  function onTouchStart(e) {
+    if (!e.touches || e.touches.length > 1) return;
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+    startTime = Date.now();
+  }
+
+  function onTouchEnd(e) {
+    // If touchend has changedTouches, use last known clientX/Y
+    const touch = (e.changedTouches && e.changedTouches[0]) || null;
+    if (!touch) return;
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    const dt = Date.now() - startTime;
+    if (dt > timeLimit) return; // too slow for a swipe
+    if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return; // not enough movement
+
+    // Determine primary direction
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 0) handleKonamiKey('ArrowRight');
+      else handleKonamiKey('ArrowLeft');
+    } else {
+      if (dy > 0) handleKonamiKey('ArrowDown');
+      else handleKonamiKey('ArrowUp');
+    }
+
+    // show a visual token quickly (already done inside handleKonamiKey via showKeyToken)
+  }
+
+  document.addEventListener('touchstart', onTouchStart, {passive:true});
+  document.addEventListener('touchend', onTouchEnd, {passive:true});
+})();
+  function onTouchEnd(e) {
+    // If touchend has changedTouches, use last known clientX/Y
+    const touch = (e.changedTouches && e.changedTouches[0]) || null;
+    if (!touch) return;
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    const dt = Date.now() - startTime;
+    if (dt > timeLimit) return; // too slow for a swipe
+    if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return; // not enough movement
+
+    // Determine primary direction
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 0) handleKonamiKey('ArrowRight');
+      else handleKonamiKey('ArrowLeft');
+    } else {
+      if (dy > 0) handleKonamiKey('ArrowDown');
+      else handleKonamiKey('ArrowUp');
+    }
+
+    // show a visual token quickly (already done inside handleKonamiKey via showKeyToken)
+  }
+
+  document.addEventListener('touchstart', onTouchStart, {passive:true});
+  document.addEventListener('touchend', onTouchEnd, {passive:true});
 
 

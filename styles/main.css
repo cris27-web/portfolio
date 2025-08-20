@@ -40,50 +40,6 @@ body {
   margin: 0;
   padding: 2rem;
 }
-body.light-mode {
-  background-color: var(--bg-color-light);
-  color: var(--text-color-light);
-}
-body.light-mode h2,
-body.light-mode .project-card h4,
-body.light-mode .project-card a {
-  color: var(--accent-color-light);
-  font-size: 1.3rem;
-  font-weight: 700; /* Optional: make it bolder */
-  margin-bottom: 0.5rem; /* Optional: adjust spacing */
-}
-body.light-mode .project-card {
-  background: #fff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  color: var(--text-color-light);
-}
-body.light-mode .project-card p {
-  color: var(--text-color-light);
-}
-body.light-mode .project-card .btn {
-  background: var(--accent-color-light);
-  color: var(--text-color-light);
-}
-body.light-mode .project-card .btn:hover {
-  background: var(--accent-color-dark-light);
-}
-body.light-mode #back-to-top {
-  background: var(--accent-color-light);
-  color: var(--text-color-light);
-}
-body.light-mode #back-to-top:hover {
-  background: var(--accent-color-dark-light);
-}
-body.light-mode #theme-toggle {
-  color: var(--accent-color-light);
-}
-
-/* Container for centralizing and max width */
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
 
 header {
   text-align: center;
@@ -98,22 +54,28 @@ header h2 {
   font-weight: 300;
   margin-top: 0.2rem;
 }
-header #theme-toggle {
-  margin-left: 1rem;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--accent-color);
-  transition: color 0.3s ease;
-}
 
 /* ===== Projects: card layout (media + content) ===== */
+#projects h3 {
+  color: var(--accent-color);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
 #projects .project-list {
   display: grid;
   gap: 1.6rem;
+  /* responsive: allow two columns when space is available, otherwise stack */
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
+
+/* Force two columns on wider desktops so projects arrange as 2x2 */
+@media (min-width: 980px) {
+  #projects .project-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 #projects .project-card {
   display: grid;
   grid-template-columns: 120px 1fr;
@@ -150,6 +112,19 @@ header #theme-toggle {
   #projects .project-card .project-media img {
     height: 140px;
     border-radius: 10px;
+  }
+}
+
+@media (min-width: 900px) {
+  #projects {
+    margin-left: 110px; /* reserve left gutter for fixed nav */
+  }
+}
+
+/* Increase project screenshot height on wide screens */
+@media (min-width: 980px) {
+  #projects .project-card .project-media img {
+    height: 140px;
   }
 }
 
@@ -827,12 +802,6 @@ nav {
   color: var(--accent-color);
   background: rgba(255, 255, 255, 0.18);
   outline: none;
-}
-
-@media (max-width: 768px) {
-  #contact-sidebar {
-    display: none;
-  }
 }
 
 /*# sourceMappingURL=main.css.map */

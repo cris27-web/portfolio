@@ -17,8 +17,10 @@
 </div>
   <header>
     <h1>Cristian Simut</h1>
-    <h2 id="tagline">Web Developer & Designer</h2>
-    <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">🌙</button>
+    <h2 id="tagline">Web Developer & Designer
+      <!-- subtle hint near the tagline -->
+      <span class="easter-hint" data-hint="Try arrow keys or the hidden controller on mobile">Hint</span>
+    </h2>
   </header>
   
   <nav id="side-nav">
@@ -59,7 +61,7 @@
   </section>
 
 <section id="skills">
-  <h3>My Skills</h3>
+  <h3>My Skills <span class="easter-hint" data-hint="Mobile players: tap the hidden controller (bottom)"></span></h3>
   <div class="skill">
     <span class="skill-name"><i class="fab fa-html5"></i> HTML</span>
     <div class="skill-bar">
@@ -95,7 +97,7 @@
 </section>
 
   <section id="projects">
-  <h3 class="reveal-fade">My Projects</h3>
+  <h3 class="reveal-fade">My Projects <span class="easter-hint" data-hint="It's a classic code — listen for the rhythm"></span></h3>
   <div class="project-list">
     <!-- Project 1 -->
     <article class="project-card reveal-up">
@@ -201,19 +203,26 @@
 </section>
 
 
+  <!-- changed: larger themed social buttons -->
   <div id="contact-sidebar">
-  <ul class="social-links">
-    <li><a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-      <i class="fab fa-linkedin"></i>
-    </a></li>
-    <li><a href="https://github.com/cris27-web" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-      <i class="fab fa-github"></i>
-    </a></li>
-    <li><a href="https://www.instagram.com/__.cristiansimut/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-      <i class="fab fa-instagram"></i>
-    </a></li>
-  </ul>
-</div>
+    <ul class="social-links">
+      <li>
+        <a class="social-btn" href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+      <li>
+        <a class="social-btn" href="https://github.com/cris27-web" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+          <i class="fab fa-github" aria-hidden="true"></i>
+        </a>
+      </li>
+      <li>
+        <a class="social-btn" href="https://www.instagram.com/__.cristiansimut/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
+          <i class="fab fa-instagram" aria-hidden="true"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
   
   </div>
 
@@ -352,7 +361,8 @@
     </div>
   </div>
 </div>
+<!-- ensure only one canvas + script include remain -->
 <canvas id="fireworks-canvas" aria-hidden="true"></canvas>
-  <script src="scripts/main.js"></script>
+<script src="scripts/main.js"></script>
 </body>
 </html>

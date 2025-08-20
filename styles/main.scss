@@ -42,58 +42,6 @@ body {
   line-height: var(--line-height-base);
   margin: 0;
   padding: 2rem;
-
-  &.light-mode {
-    background-color: var(--bg-color-light);
-    color: var(--text-color-light);
-
-    h2,
-    .project-card h4,
-    .project-card a {
-      color: var(--accent-color-light);
-      font-size: 1.3rem;
-      font-weight: 700; /* Optional: make it bolder */
-      margin-bottom: 0.5rem; /* Optional: adjust spacing */ 
-    }
-
-    .project-card {
-      background: #fff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-      color: var(--text-color-light);
-
-      p {
-        color: var(--text-color-light);
-      }
-      .btn {
-        background: var(--accent-color-light);
-        color: var(--text-color-light);
-
-        &:hover {
-          background: var(--accent-color-dark-light);
-        }
-      }
-    }
-
-    #back-to-top {
-      background: var(--accent-color-light);
-      color: var(--text-color-light);
-
-      &:hover {
-        background: var(--accent-color-dark-light);
-      }
-    }
-
-    #theme-toggle {
-      color: var(--accent-color-light);
-    }
-  }
-}
-
-/* Container for centralizing and max width */
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 1rem;
 }
 
 header {
@@ -110,23 +58,22 @@ header {
     font-weight: 300;
     margin-top: 0.2rem;
   }
-
-  #theme-toggle {
-    margin-left: 1rem;
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--accent-color);
-    transition: color 0.3s ease;
-  }
 }
 
 /* ===== Projects: card layout (media + content) ===== */
 #projects {
+  h3 {
+    color: var(--accent-color);
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
   .project-list {
     display: grid;
     gap: 1.6rem;
+
+    /* default: responsive columns that allow two columns when space permits */
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
 
@@ -156,9 +103,30 @@ header {
       .project-actions { margin-top: 0.25rem; }
     }
 
+    /* Force a two-column layout on wider viewports so projects arrange 2x2 on desktop */
+    @media (min-width: 980px) {
+      .project-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
     @media (max-width: 720px) {
       grid-template-columns: 1fr;
       .project-media img { height: 140px; border-radius: 10px; }
+    }
+  }
+
+  /* Reserve space for the fixed left nav on wider screens so content doesn't slide under it */
+  @media (min-width: 900px) {
+    margin-left: 110px; /* adjust if your side-nav is wider/narrower */
+  }
+
+  /* Make screenshots more visible on desktop */
+  @media (min-width: 980px) {
+    .project-card {
+      .project-media {
+        img { height: 140px; } /* larger thumbnail on desktop */
+      }
     }
   }
 }
