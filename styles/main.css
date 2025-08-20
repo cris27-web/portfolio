@@ -904,20 +904,35 @@ body::before {
   height: 48px;
   border-radius: 50%;
   background: rgba(255,255,255,0.08);
-}
-#contact-sidebar .social-links li a:hover,
-#contact-sidebar .social-links li a:focus {
-  color: var(--accent-color);
-  background: rgba(255,255,255,0.18);
-  outline: none;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
 }
 
-/*# sourceMappingURL=main.css.map */
-#contact-sidebar .social-links li a:hover, #contact-sidebar .social-links li a:focus {
-  color: var(--accent-color);
-  background: rgba(255, 255, 255, 0.18);
-  outline: none;
-}
+/* Mobile: show contact bar as a compact bottom-center strip */
+@media (max-width: 768px) {
+  #contact-sidebar {
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    padding: 0.25rem 0.5rem;
+    background: rgba(20,20,22,0.6);
+    border-radius: 999px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: block;
+  }
 
-/*# sourceMappingURL=main.css.map */
-/*# sourceMappingURL=main.css.map */
+  #contact-sidebar .social-links {
+    flex-direction: row;
+    gap: 0.6rem;
+  }
+
+  #contact-sidebar .social-links li a {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    background: rgba(255,255,255,0.06);
+  }
+}
