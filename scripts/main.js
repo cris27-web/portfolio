@@ -1,282 +1,217 @@
-// Typing effect for tagline
-const tagline = document.getElementById('tagline');
-const text = 'Web Developer & Designer';
-let index = 0;
-
-function type() {
-  if (index < text.length) {
-    tagline.textContent += text.charAt(index);
-    index++;
-    setTimeout(type, 150);
-  }
-}
-
-tagline.textContent = ''; // Clear initial text
-type();
-
-// Animate header on page load
-anime.timeline()
-  .add({
-    targets: 'h1',
-    translateY: [-50, 0],
-    opacity: [0, 1],
-    duration: 1000,
-    easing: 'easeOutExpo'
-  })
-  .add({
-    targets: '#tagline',
-    opacity: [0, 1],
-    duration: 800,
-    easing: 'easeOutExpo'
-  }, '-=600'); // overlap by 600ms
-
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if(target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
-
-// Back to top button show/hide & smooth scroll
-const backToTop = document.getElementById('back-to-top');
-
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 300) {
-    backToTop.style.display = 'block';
-  } else {
-    backToTop.style.display = 'none';
-  }
-});
-
-backToTop.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-function animateChange(el) {
-  anime.timeline()
-    .add({
-      targets: el,
-      opacity: [1, 0],
-      duration: 0,
-      easing: 'easeOutQuad',
-    })
-    .add({
-      targets: el,
-      opacity: [0, 1],
-      duration: 0,
-      easing: 'easeInQuad',
-    });
-}
-
-
-// Format functions (unchanged)
-function formatTime(date) {
-  let hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-
-  const strTime = [
-    hours.toString().padStart(2, '0'),
-    minutes.toString().padStart(2, '0'),
-    seconds.toString().padStart(2, '0'),
-  ].join(':');
-
-  return `${strTime} ${ampm}`;
-}
-
-function formatDate(date) {
-  return date.toLocaleDateString(undefined, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
-
-// Store previous values to detect change
-let prevTime = '';
-let prevDate = '';
-
-function updateFloatingTime() {
-  const timeEl = document.getElementById('floating-time');
-  if (!timeEl) return;
-
-  const now = new Date();
-  let hours = now.getHours();
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-
-  hours = hours % 12 || 12; // convert 0 to 12 for 12-hour format
-  const timeString = `${hours}:${minutes} ${ampm}`;
-
-  timeEl.textContent = timeString;
-}
-
-// Initial call and update every minute
-updateFloatingTime();
-setInterval(updateFloatingTime, 60 * 1000);
-// Skills animation (updated: width + count-up + aria)
-function animateSkills() {
-  const skills = document.querySelectorAll('.skill-fill');
-
-  // Don't animate if user prefers reduced motion
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  skills.forEach(skill => {
-    const raw = (skill.getAttribute('data-fill') || '0%').trim();
-    const target = parseInt(raw.replace('%',''), 10) || 0;
-
-    // set width (CSS handles transition)
-    if (!reduce) {
-      // trigger reflow to ensure transition when element becomes visible
-      // (use requestAnimationFrame to separate style writes)
-      requestAnimationFrame(() => {
-        skill.style.width = target + '%';
-      });
-    } else {
-      skill.style.width = target + '%';
-    }
-
-    // animate numeric counter
-    const percentEl = skill.querySelector('.percent');
-    if (!percentEl) return;
-
-    // If already animated, skip
-    if (skill.dataset.animated === 'true') {
-      // ensure aria reflects final value
-      skill.setAttribute('aria-valuenow', String(target));
-      percentEl.textContent = target + '%';
-      return;
-    }
-
-    skill.dataset.animated = 'true';
-    const duration = reduce ? 0 : 900; // ms
-    const start = performance.now();
-    const startValue = 0;
-
-    function step(now) {
-      const elapsed = now - start;
-      const progress = duration ? Math.min(elapsed / duration, 1) : 1;
-      const value = Math.round(startValue + (target - startValue) * progress);
-      percentEl.textContent = value + '%';
-      skill.setAttribute('aria-valuenow', String(value));
-
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        // ensure exact final
-        percentEl.textContent = target + '%';
-        skill.setAttribute('aria-valuenow', String(target));
-      }
-    }
-
-    requestAnimationFrame(step);
-  });
-}
-
-// ---------- helper: is element in viewport ----------
-function isInViewport(el, offset = 0) {
-  if (!el) return false;
-  const rect = el.getBoundingClientRect();
-  return rect.top <= (window.innerHeight || document.documentElement.clientHeight) - offset
-      && rect.bottom >= 0 + offset;
-}
-
-// Trigger skills animation when skills section becomes visible (reuse existing logic)
-function checkSkillsAnimation() {
-  const skillsSection = document.getElementById('skills');
-  if (!skillsSection) return;
-  if (!skillsSection.classList.contains('animated') && isInViewport(skillsSection, 40)) {
-    animateSkills();
-    skillsSection.classList.add('animated');
-  }
-}
-
-// ensure the check runs early and also when images/fonts finish layout
-window.addEventListener('scroll', checkSkillsAnimation);
-window.addEventListener('load', checkSkillsAnimation);
-document.addEventListener('DOMContentLoaded', checkSkillsAnimation);
-
-const navLinks = document.querySelectorAll('#side-nav ul li a');
-const sections = Array.from(navLinks).map(link => document.querySelector(link.getAttribute('href')));
-
-function onScroll() {
-  const scrollPos = window.scrollY + window.innerHeight / 2; // middle of viewport
-
-  sections.forEach((section, index) => {
-    if (section.offsetTop <= scrollPos && (section.offsetTop + section.offsetHeight) > scrollPos) {
-      navLinks.forEach(link => link.classList.remove('active'));
-      navLinks[index].classList.add('active');
-    }
-  });
-}
-
-window.addEventListener('scroll', onScroll);
-
-// Optional: Smooth scroll behavior for nav links
-navLinks.forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(link.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
 document.addEventListener('DOMContentLoaded', () => {
-  // Select the h1 inside header
-  const heading = document.querySelector('header h1');
-
-  // Split text into chars and clear original text
-  const chars = heading.textContent.split('');
-  heading.textContent = '';
-
-  // Wrap each char in a span
-  chars.forEach(char => {
-    const span = document.createElement('span');
-    span.textContent = char;
-    heading.appendChild(span);
-  });
-
-  // Select all spans to animate
-  const charSpans = heading.querySelectorAll('span');
-
-  // Anime.js animation
-  anime({
-    targets: charSpans,
-    y: [
-      { value: '-2.75rem', easing: 'easeOutExpo', duration: 600 },
-      { value: 0, easing: 'easeOutBounce', duration: 800, delay: 100 }
-    ],
-    rotate: {
-      value: '-1turn',
-      delay: 0
-    },
-    delay: anime.stagger(50),
-    easing: 'easeInOutCirc',
-    loopDelay: 1000,
-    loop: true
-  });
+  initHeaderAnimation();
+  initSmoothScrolling();
+  initBackToTop();
+  initFloatingTime();
+  initSkills();
+  initSideNav();
+  initRevealOnScroll();
+  initModals();
+  initParallax();
+  initKonami();
+  initImageFallbacks();
+  initCardTilt();
+  initButtonRipple();
 });
 
-/* ---------- Reveal on scroll (IntersectionObserver) ---------- */
-(function initRevealOnScroll() {
-  const els = document.querySelectorAll('.reveal-up, .reveal-fade');
-  if (!('IntersectionObserver' in window) || els.length === 0) {
-    // Fallback: show immediately
-    els.forEach(el => el.classList.add('visible'));
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function initHeaderAnimation() {
+  const heading = document.querySelector('header h1');
+  const tagline = document.getElementById('tagline');
+  const reduce = prefersReducedMotion();
+
+  if (heading && !reduce && typeof anime !== 'undefined') {
+    const text = heading.textContent || '';
+    heading.textContent = '';
+
+    text.split('').forEach((char) => {
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.style.display = 'inline-block';
+      heading.appendChild(span);
+    });
+
+    anime({
+      targets: heading.querySelectorAll('span'),
+      translateY: [
+        { value: '-2.75rem', easing: 'easeOutExpo', duration: 600 },
+        { value: 0, easing: 'easeOutBounce', duration: 800, delay: 100 }
+      ],
+      rotate: '-1turn',
+      delay: anime.stagger(50),
+      easing: 'easeInOutCirc',
+      loopDelay: 1200,
+      loop: true
+    });
+  }
+
+  if (!tagline) return;
+  const fullText = tagline.dataset.fulltext || tagline.textContent.trim();
+
+  if (reduce) {
+    tagline.textContent = fullText;
     return;
   }
 
-  const io = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
+  tagline.textContent = '';
+  let index = 0;
+
+  setTimeout(function typeChar() {
+    tagline.textContent += fullText.charAt(index);
+    index += 1;
+
+    if (index < fullText.length) {
+      setTimeout(typeChar, 80);
+    }
+  }, 300);
+}
+
+function initSmoothScrolling() {
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (event) => {
+      const href = anchor.getAttribute('href');
+      if (!href || href === '#') return;
+
+      const target = document.querySelector(href);
+      if (!target) return;
+
+      event.preventDefault();
+      target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    });
+  });
+}
+
+function initBackToTop() {
+  const button = document.getElementById('back-to-top');
+  if (!button) return;
+
+  const toggle = () => {
+    button.classList.toggle('is-visible', window.scrollY > 300);
+  };
+
+  toggle();
+  window.addEventListener('scroll', toggle, { passive: true });
+  button.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+  });
+}
+
+function initFloatingTime() {
+  const timeEl = document.getElementById('floating-time');
+  if (!timeEl) return;
+
+  const update = () => {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12 || 12;
+    timeEl.textContent = `${hours}:${minutes} ${ampm}`;
+  };
+
+  update();
+  setInterval(update, 60 * 1000);
+}
+
+function initSkills() {
+  const skillsSection = document.getElementById('skills');
+  const cards = document.querySelectorAll('.skill-card');
+  if (!skillsSection || !cards.length) return;
+
+  const animate = () => {
+    const reduce = prefersReducedMotion();
+
+    cards.forEach((card) => {
+      if (card.dataset.animated === 'true') return;
+      card.dataset.animated = 'true';
+
+      const target = Number.parseInt(card.dataset.fill || '0', 10);
+      const ring = card.querySelector('.skill-ring');
+      const percent = card.querySelector('.skill-percent');
+
+      if (ring) {
+        requestAnimationFrame(() => ring.style.setProperty('--pct', target));
+      }
+
+      if (!percent) return;
+
+      if (reduce) {
+        percent.textContent = `${target}%`;
+        return;
+      }
+
+      const duration = 900;
+      const start = performance.now();
+
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        percent.textContent = `${Math.round(target * progress)}%`;
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      }
+
+      requestAnimationFrame(step);
+    });
+  };
+
+  if (!('IntersectionObserver' in window)) {
+    animate();
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        animate();
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(skillsSection);
+}
+
+function initSideNav() {
+  const navLinks = Array.from(document.querySelectorAll('#side-nav a[href^="#"]'));
+  const sections = navLinks
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  if (!navLinks.length || !sections.length) return;
+
+  const update = () => {
+    const scrollPos = window.scrollY + window.innerHeight / 2;
+
+    sections.forEach((section) => {
+      const link = navLinks.find((item) => item.getAttribute('href') === `#${section.id}`);
+      if (!link) return;
+
+      const isActive = section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos;
+      link.classList.toggle('active', isActive);
+    });
+  };
+
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+}
+
+function initRevealOnScroll() {
+  const elements = document.querySelectorAll('.reveal-up, .reveal-fade');
+  if (!elements.length) return;
+
+  if (!('IntersectionObserver' in window) || prefersReducedMotion()) {
+    elements.forEach((element) => element.classList.add('visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
         obs.unobserve(entry.target);
@@ -284,621 +219,387 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.15 });
 
-  els.forEach(el => io.observe(el));
-})();
+  elements.forEach((element) => observer.observe(element));
+}
 
-/* ---------- Case study modals (improved) ---------- */
-(function initModals() {
-  function openModal(sel) {
-    const modal = document.querySelector(sel);
+function initModals() {
+  let lastFocused = null;
+
+  function focusFirst(modal) {
+    const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable) focusable.focus();
+  }
+
+  function openModal(selector) {
+    const modal = document.querySelector(selector);
     if (!modal) return;
+
+    lastFocused = document.activeElement;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
 
-    const dlg = modal.querySelector('.modal-dialog');
-    if (dlg) {
-      // trigger CSS entrance
-      requestAnimationFrame(() => dlg.classList.add('open-anim'));
-      // focus first focusable element for accessibility
-      const focusable = dlg.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-      if (focusable) focusable.focus();
-      else {
-        dlg.setAttribute('tabindex', '-1');
-        dlg.focus();
-      }
-    }
+    const dialog = modal.querySelector('.modal-dialog');
+    if (dialog) requestAnimationFrame(() => dialog.classList.add('open-anim'));
+    focusFirst(modal);
   }
 
   function closeModal(modal) {
     if (!modal) return;
+
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
 
-    const dlg = modal.querySelector('.modal-dialog');
-    if (dlg) dlg.classList.remove('open-anim');
+    const dialog = modal.querySelector('.modal-dialog');
+    if (dialog) dialog.classList.remove('open-anim');
+
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus();
+    }
   }
 
-  // Use a capturing click listener to ensure modal open/close is handled before other handlers
-  document.addEventListener('click', (e) => {
-    const openBtn = e.target.closest('.open-modal');
-    if (openBtn) {
-      e.preventDefault();
-      e.stopPropagation();
-      const target = openBtn.getAttribute('data-target');
-      if (target) openModal(target);
+  document.addEventListener('click', (event) => {
+    const openButton = event.target.closest('.open-modal');
+    if (openButton) {
+      event.preventDefault();
+      openModal(openButton.dataset.target);
       return;
     }
 
-    // close when clicking elements marked with [data-close] (backdrop / close buttons)
-    if (e.target.matches('[data-close]') || e.target.closest('[data-close]')) {
-      e.preventDefault();
-      e.stopPropagation();
-      const modal = e.target.closest('.modal');
-      if (modal) closeModal(modal);
-      return;
-    }
-  }, true);
-
-  // Close on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal.is-open').forEach(m => closeModal(m));
+    const closeButton = event.target.closest('[data-close]');
+    if (closeButton) {
+      event.preventDefault();
+      closeModal(closeButton.closest('.modal'));
     }
   });
-})();
 
-/* ---------- Light parallax background ---------- */
-(function initParallax() {
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    document.querySelectorAll('.modal.is-open').forEach(closeModal);
+  });
+}
+
+function initParallax() {
   const blobs = document.querySelectorAll('.parallax-bg .blob');
-  if (!blobs.length) return;
+  if (!blobs.length || prefersReducedMotion()) return;
 
-  const onScroll = () => {
+  const update = () => {
     const y = window.scrollY || document.documentElement.scrollTop || 0;
-    blobs.forEach(blob => {
-      const depth = parseFloat(blob.dataset.depth || '0.1');
-      // subtle move (slower than scroll): positive translates down, feels “deeper”
+
+    blobs.forEach((blob) => {
+      const depth = Number.parseFloat(blob.dataset.depth || '0.1');
       blob.style.transform = `translateY(${y * depth}px)`;
     });
   };
 
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-})();
-
-
-/* ---------- Konami Code (visual + sequence handling + improved fireworks) ---------- */
-// Sequence: up up down down left right left right b a
-const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let konamiPos = 0;
-let konamiActive = false; // true after first correct key
-
-// optional overlay elements — guard in case markup is missing
-const overlay = document.getElementById('konami-overlay');
-const keySeqEl = overlay ? overlay.querySelector('.key-sequence') : null;
-const konamiMsg = overlay ? overlay.querySelector('.konami-msg') : null;
-
-// nice printable labels for keys
-const keyLabel = {
-  'ArrowUp': '↑',
-  'ArrowDown': '↓',
-  'ArrowLeft': '←',
-  'ArrowRight': '→',
-  'b': 'B',
-  'a': 'A'
-};
-
-// show a token for a pressed key (no-op if overlay/keySeqEl missing)
-function showKeyToken(keyName, ok = true) {
-  if (!overlay || !keySeqEl) return;
-  overlay.classList.add('visible');
-  const token = document.createElement('span');
-  token.className = 'key-token';
-  if (!ok) token.style.opacity = '0.6';
-  token.textContent = keyLabel[keyName] || keyName.toUpperCase();
-  keySeqEl.appendChild(token);
-
-  // pulse animation
-  requestAnimationFrame(() => token.classList.add('pulse'));
-  setTimeout(() => token.classList.remove('pulse'), 260);
-
-  // keep only last N tokens (N = sequence length)
-  const max = konamiSeq.length;
-  while (keySeqEl.children.length > max) keySeqEl.removeChild(keySeqEl.firstChild);
+  update();
+  window.addEventListener('scroll', update, { passive: true });
 }
 
-// clear tokens and message (safe when overlay missing)
-function clearKonamiVisuals(delay = 0) {
-  if (!overlay || !keySeqEl || !konamiMsg) return;
-  setTimeout(() => {
-    keySeqEl.innerHTML = '';
-    overlay.classList.remove('show-msg','success','visible');
-    konamiMsg.textContent = '';
-  }, delay);
+function initKonami() {
+  const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  const overlay = document.getElementById('konami-overlay');
+  const keySeqEl = overlay ? overlay.querySelector('.key-sequence') : null;
+  const messageEl = overlay ? overlay.querySelector('.konami-msg') : null;
+  const labels = {
+    ArrowUp: 'Up',
+    ArrowDown: 'Down',
+    ArrowLeft: 'Left',
+    ArrowRight: 'Right',
+    b: 'B',
+    a: 'A'
+  };
+
+  let position = 0;
+  let hideTimer = null;
+
+  function showMessage(text) {
+    if (!overlay || !messageEl) return;
+
+    overlay.classList.add('visible');
+    messageEl.textContent = text;
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      overlay.classList.remove('visible', 'success');
+      if (keySeqEl) keySeqEl.textContent = '';
+      messageEl.textContent = '';
+    }, 1600);
+  }
+
+  function showKey(key, ok) {
+    if (!overlay || !keySeqEl) return;
+
+    overlay.classList.add('visible');
+    const token = document.createElement('span');
+    token.className = ok ? 'key-token' : 'key-token is-error';
+    token.textContent = labels[key] || key.toUpperCase();
+    keySeqEl.appendChild(token);
+
+    while (keySeqEl.children.length > sequence.length) {
+      keySeqEl.removeChild(keySeqEl.firstElementChild);
+    }
+  }
+
+  function handleKey(key) {
+    const normalized = key.length === 1 ? key.toLowerCase() : key;
+
+    if (normalized === sequence[position]) {
+      showKey(normalized, true);
+      position += 1;
+
+      if (position === sequence.length) {
+        position = 0;
+        if (overlay) overlay.classList.add('success');
+        showMessage('Sequence complete!');
+        triggerFireworks();
+      }
+
+      return;
+    }
+
+    if (position > 0) {
+      showKey(normalized, false);
+      showMessage("You're close!");
+    }
+
+    position = 0;
+  }
+
+  document.addEventListener('keydown', (event) => {
+    const isTouchDevice = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    const isSmallScreen = window.innerWidth <= 720;
+    if (isTouchDevice || isSmallScreen) return;
+    handleKey(event.key);
+  });
+
+  document.addEventListener('click', (event) => {
+    const hint = event.target.closest('.easter-hint');
+    if (!hint) return;
+    showMessage(hint.dataset.hint || 'Try the classic key sequence.');
+  });
+
+  initKonamiSwipes(handleKey);
 }
 
-// show message in overlay (safe when konamiMsg missing)
-function showKonamiMessage(text, short = true) {
-  if (!konamiMsg || !overlay) return;
-  konamiMsg.textContent = text;
-  overlay.classList.add('show-msg');
-  if (short) setTimeout(() => overlay.classList.remove('show-msg'), 1100);
+function initKonamiSwipes(handleKey) {
+  if (!window.matchMedia || !window.matchMedia('(pointer: coarse)').matches) return;
+
+  let startX = 0;
+  let startY = 0;
+  let startTime = 0;
+
+  document.addEventListener('touchstart', (event) => {
+    if (!event.touches || event.touches.length > 1) return;
+    const touch = event.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    startTime = Date.now();
+  }, { passive: true });
+
+  document.addEventListener('touchend', (event) => {
+    const touch = event.changedTouches && event.changedTouches[0];
+    if (!touch || Date.now() - startTime > 700) return;
+
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    if (Math.abs(dx) < 30 && Math.abs(dy) < 30) return;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      handleKey(dx > 0 ? 'ArrowRight' : 'ArrowLeft');
+    } else {
+      handleKey(dy > 0 ? 'ArrowDown' : 'ArrowUp');
+    }
+  }, { passive: true });
 }
 
-/* ---------- improved fireworks function unchanged (uses DOM canvas if present) ---------- */
 function triggerFireworks() {
   const canvas = document.getElementById('fireworks-canvas');
-  if (!canvas) return;
+  if (!canvas || prefersReducedMotion()) return;
+
   const ctx = canvas.getContext('2d');
-  let W = window.innerWidth;
-  let H = window.innerHeight;
-  canvas.width = W;
-  canvas.height = H;
-  canvas.style.position = 'fixed';
-  canvas.style.top = '0';
-  canvas.style.left = '0';
-  canvas.style.pointerEvents = 'none';
-  canvas.style.zIndex = '9999';
+  if (!ctx) return;
+
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+  canvas.classList.add('is-active');
 
   const fireworks = [];
   const particles = [];
-
-  function rand(min, max) { return Math.random() * (max - min) + min; }
+  const rand = (min, max) => Math.random() * (max - min) + min;
 
   class Firework {
-    constructor(x, y, targetY, color) {
-      this.x = x; this.y = y; this.targetY = targetY; this.color = color;
+    constructor() {
+      this.x = rand(60, width - 60);
+      this.y = height + 10;
+      this.targetY = rand(80, height * 0.45);
+      this.color = `hsl(${Math.floor(rand(0, 360))}, 85%, ${rand(45, 65)}%)`;
       this.speed = rand(5, 9);
-      this.radius = rand(2,4);
-      this.vx = rand(-1.2,1.2);
+      this.vx = rand(-1.2, 1.2);
     }
+
     update() {
       this.y -= this.speed;
       this.x += this.vx * 0.6;
       this.speed *= 0.99;
+
       if (this.y <= this.targetY || this.speed < 1.4) {
-        this.explode();
+        for (let i = 0; i < 60; i += 1) {
+          particles.push(new Particle(this.x, this.y, this.color));
+        }
         return true;
       }
+
       return false;
     }
+
     draw() {
       ctx.beginPath();
       ctx.fillStyle = this.color;
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+      ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
       ctx.fill();
-    }
-    explode() {
-      const count = Math.floor(rand(40, 80));
-      for (let i=0;i<count;i++) particles.push(new Particle(this.x, this.y, this.color));
     }
   }
 
   class Particle {
     constructor(x, y, color) {
-      this.x = x; this.y = y; this.color = color;
-      this.speed = rand(1,7);
-      this.angle = rand(0, Math.PI*2);
+      const speed = rand(1, 7);
+      const angle = rand(0, Math.PI * 2);
+      this.x = x;
+      this.y = y;
+      this.color = color;
       this.alpha = 1;
       this.decay = rand(0.008, 0.03);
-      this.radius = rand(1,3.5);
-      this.vx = Math.cos(this.angle) * this.speed;
-      this.vy = Math.sin(this.angle) * this.speed;
-      this.gravity = 0.06;
+      this.radius = rand(1, 3.5);
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
     }
+
     update() {
-      this.vy += this.gravity;
+      this.vy += 0.06;
       this.x += this.vx;
       this.y += this.vy;
       this.alpha -= this.decay;
       return this.alpha <= 0;
     }
+
     draw() {
       ctx.globalAlpha = Math.max(0, this.alpha);
       ctx.beginPath();
       ctx.fillStyle = this.color;
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = 1;
     }
   }
 
-  // animation loop with trails: fade previous frame with low alpha rectangle
-  let animId;
-  function animate() {
-    animId = requestAnimationFrame(animate);
+  const resize = () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  };
 
-    // fade out previous frame slightly (gives trails)
+  window.addEventListener('resize', resize);
+
+  let animationFrame = null;
+  function animate() {
+    animationFrame = requestAnimationFrame(animate);
     ctx.globalCompositeOperation = 'destination-out';
     ctx.fillStyle = 'rgba(0,0,0,0.18)';
-    ctx.fillRect(0, 0, W, H);
-    ctx.globalCompositeOperation = 'lighter'; // additive for bright explosions
+    ctx.fillRect(0, 0, width, height);
+    ctx.globalCompositeOperation = 'lighter';
 
-    // launch occasional fireworks
-    if (Math.random() < 0.12) {
-      const x = rand(60, W - 60);
-      const targetY = rand(80, H * 0.45);
-      const color = `hsl(${Math.floor(rand(0,360))}, 85%, ${rand(45,65)}%)`;
-      fireworks.push(new Firework(x, H + 10, targetY, color));
+    if (Math.random() < 0.12) fireworks.push(new Firework());
+
+    for (let i = fireworks.length - 1; i >= 0; i -= 1) {
+      if (fireworks[i].update()) fireworks.splice(i, 1);
+      else fireworks[i].draw();
     }
 
-    // update/draw fireworks
-    for (let i = fireworks.length - 1; i >= 0; i--) {
-      const fw = fireworks[i];
-      if (fw.update()) fireworks.splice(i,1);
-      else fw.draw();
-    }
-
-    // update/draw particles
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
-      if (p.update()) particles.splice(i,1);
-      else p.draw();
+    for (let i = particles.length - 1; i >= 0; i -= 1) {
+      if (particles[i].update()) particles.splice(i, 1);
+      else particles[i].draw();
     }
   }
 
-  // visual pulse on blobs during fireworks
-  document.body.classList.add('fireworks-active');
   animate();
 
-  // stop after a duration
   setTimeout(() => {
-    cancelAnimationFrame(animId);
-    // quickly fade out particles
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(0,0,W,H);
-    ctx.clearRect(0,0,W,H);
-    document.body.classList.remove('fireworks-active');
+    cancelAnimationFrame(animationFrame);
+    window.removeEventListener('resize', resize);
+    ctx.clearRect(0, 0, width, height);
+    canvas.classList.remove('is-active');
   }, 6500);
 }
 
-/* ---------- helper to process Konami input (keyboard only) ---------- */
-function handleKonamiKey(key) {
-  // normalize single-character keys to lowercase (a/b) while keeping arrows
-  const k = (key.length === 1) ? key.toLowerCase() : key;
-
-  if (k === konamiSeq[konamiPos]) {
-    if (!konamiActive) konamiActive = true;
-    showKeyToken(k, true);
-    konamiPos++;
-    if (konamiPos === konamiSeq.length) {
-      if (overlay) overlay.classList.add('success');
-      showKonamiMessage("Sequence complete! 🎆", true);
-      triggerFireworks();
-      setTimeout(() => clearKonamiVisuals(400), 1200);
-      konamiPos = 0;
-      konamiActive = false;
-    }
-  } else {
-    if (konamiActive) {
-      showKeyToken(k, false);
-      showKonamiMessage("You're close!", true);
-      konamiPos = 0;
-      konamiActive = false;
-      setTimeout(() => clearKonamiVisuals(600), 900);
-    } else {
-      // ignore stray input before sequence starts
-    }
-  }
-}
-
-/* ---------- Desktop-only keyboard listener ----------
-   Ignore keyboard Konami input on touch / small screens.
-*/
-document.addEventListener('keydown', (e) => {
-  const isTouchDevice = ('ontouchstart' in window) ||
-                        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
-                        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const isSmallScreen = window.innerWidth <= 720;
-  if (isTouchDevice || isSmallScreen) return;
-  handleKonamiKey(e.key);
-});
-
-// Keep hint click behavior simple (no mobile UI/timers)
-document.addEventListener('click', (ev) => {
-  const hint = ev.target.closest('.easter-hint');
-  if (!hint) return;
-  const text = hint.dataset.hint || 'Try arrow keys';
-  showKonamiMessage(text, true);
-});
-
-/* ---------- Minor safety: guard mobile nav toggle hookup ---------- */
-document.addEventListener("DOMContentLoaded", () => {
-  const hamburger = document.querySelector(".hamburger");
-  const navLinks = document.querySelector(".nav-links");
-  if (hamburger && navLinks) {
-    hamburger.addEventListener("click", () => {
-      navLinks.classList.toggle("open");
-    });
-  }
-});
-
-/* ---------- Image fallback: replace broken images with an inline SVG placeholder ---------- */
-(function initImageFallbacks() {
+function initImageFallbacks() {
   const placeholderSVG = encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" viewBox="0 0 600 320">
-      <rect width="100%" height="100%" fill="#2a2b2d"/>
-      <text x="50%" y="50%" fill="#9ea3a8" font-family="sans-serif" font-size="20" dominant-baseline="middle" text-anchor="middle">Image not found</text>
-    </svg>`
+    '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" viewBox="0 0 600 320"><rect width="100%" height="100%" fill="#2a2b2d"/><text x="50%" y="50%" fill="#9ea3a8" font-family="sans-serif" font-size="20" dominant-baseline="middle" text-anchor="middle">Image not found</text></svg>'
   );
   const dataUri = `data:image/svg+xml;utf8,${placeholderSVG}`;
 
-  // Attach a one-time error handler to all <img> so missing files show the placeholder
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('img').forEach(img => {
-      img.addEventListener('error', function onErr() {
-        this.removeEventListener('error', onErr);
-        this.src = dataUri;
-        this.classList.add('img--placeholder');
-      });
+  document.querySelectorAll('img').forEach((img) => {
+    img.addEventListener('error', function onError() {
+      this.removeEventListener('error', onError);
+      this.src = dataUri;
+      this.classList.add('img--placeholder');
     });
   });
-})();
-
-// Mobile nav toggle
-document.addEventListener("DOMContentLoaded", () => {
-  const hamburger = document.querySelector(".hamburger");
-  const navLinks = document.querySelector(".nav-links");
-
-  hamburger.addEventListener("click", () => {
-    navLinks.classList.toggle("open");
-  });
-});
-
-// Replace duplicated about fade-in calls with an animated trigger that respects prefers-reduced-motion
-const aboutSection = document.getElementById('about');
-document.addEventListener('DOMContentLoaded', () => {
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  setTimeout(() => {
-    if (aboutSection) aboutSection.classList.add('fade-in');
-    // if user prefers reduced motion, skip staggered animate but still ensure content visible
-    if (!aboutSection) return;
-    if (reduce) {
-      aboutSection.classList.add('animate'); // keep visible without motion
-      return;
-    }
-    // small delay so CSS transitions (fade-in) begin before animate
-    setTimeout(() => {
-      aboutSection.classList.add('animate');
-    }, 180);
-  }, 300);
-});
-
-function openKonamiMobile() {
-  if (!konamiMobile) return;
-  konamiMobile.classList.add('open');
-  konamiMobile.setAttribute('aria-hidden', 'false');
-  konamiToggle.setAttribute('aria-expanded', 'true');
-  konamiToggle.classList.add('active');
-  // show overlay too so tokens/messages are visible
-  overlay.classList.add('visible');
-  // auto-hide after 12s of inactivity
-  clearTimeout(konamiAutoHideTimer);
-  konamiAutoHideTimer = setTimeout(closeKonamiMobile, 12000);
-}
-function closeKonamiMobile() {
-  if (!konamiMobile) return;
-  konamiMobile.classList.remove('open');
-  konamiMobile.setAttribute('aria-hidden', 'true');
-  konamiToggle.setAttribute('aria-expanded', 'false');
-  konamiToggle.classList.remove('active');
-  // optionally hide overlay tokens after short delay if none shown
-  clearTimeout(konamiAutoHideTimer);
-  konamiAutoHideTimer = setTimeout(() => {
-    if (keySeqEl.children.length === 0) overlay.classList.remove('visible');
-  }, 600);
-}
-if (konamiToggle) {
-  konamiToggle.addEventListener('click', () => {
-    if (konamiMobile && konamiMobile.classList.contains('open')) closeKonamiMobile();
-    else openKonamiMobile();
-  });
 }
 
-// reset auto-hide timer when user interacts with mobile buttons
-if (konamiMobile) {
-  konamiMobile.addEventListener('click', () => {
-    clearTimeout(konamiAutoHideTimer);
-    konamiAutoHideTimer = setTimeout(closeKonamiMobile, 12000);
-  });
-  konamiMobile.addEventListener('touchstart', () => {
-    clearTimeout(konamiAutoHideTimer);
-    konamiAutoHideTimer = setTimeout(closeKonamiMobile, 12000);
-  }, {passive:true});
-}
+function initCardTilt() {
+  if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches || prefersReducedMotion()) return;
 
-// Hint badges: show short konami hint via overlay message when clicked
-document.addEventListener('click', (ev) => {
-  const hint = ev.target.closest('.easter-hint');
-  if (!hint) return;
-  const text = hint.dataset.hint || 'Try arrow keys or the hidden controller';
-  showKonamiMessage(text, true);
-  // briefly reveal overlay if hidden
-  overlay.classList.add('visible');
-  clearTimeout(konamiAutoHideTimer);
-  konamiAutoHideTimer = setTimeout(() => {
-    // keep overlay visible a short time for message, then hide if no tokens
-    if (keySeqEl.children.length === 0) overlay.classList.remove('visible');
-  }, 1800);
-});
-
-/* ---------- Mobile gestures + hotspots for Konami (swipe + quick taps) ---------- */
-// Create two small hotspots for B (left) and A (right) so mobile users can tap without opening controller
-(function initKonamiHotspots() {
-  if (!('ontouchstart' in window)) return; // only for touch devices
-
-  function makeHotspot(side, keyLabelChar, keyName) {
-    const el = document.createElement('button');
-    el.className = `konami-hotspot ${side}`;
-    el.setAttribute('aria-label', `Konami ${keyLabelChar}`);
-    el.innerHTML = `<span>${keyLabelChar}</span>`;
-    el.dataset.konamiKey = keyName;
-    // visual press handler
-    const flash = () => {
-      el.classList.add('active');
-      setTimeout(() => el.classList.remove('active'), 180);
-    };
-    el.addEventListener('click', (e) => { e.preventDefault(); flash(); handleKonamiKey(keyName); });
-    el.addEventListener('touchstart', (e) => { e.preventDefault(); flash(); handleKonamiKey(keyName); }, {passive:false});
-    document.body.appendChild(el);
-    return el;
-  }
-
-  // left -> B, right -> A
-  makeHotspot('left', 'B', 'b');
-  makeHotspot('right', 'A', 'a');
-
-  // optional: hide hotspots when konamiMobile is explicitly opened (so UI doesn't duplicate)
-  const mobilePanel = document.getElementById('konami-mobile');
-  const updateHotspotVisibility = () => {
-    const hotspots = document.querySelectorAll('.konami-hotspot');
-    if (mobilePanel && mobilePanel.classList.contains('open')) {
-      hotspots.forEach(h => h.style.display = 'none');
-    } else {
-      hotspots.forEach(h => h.style.display = (window.innerWidth <= 720 ? 'flex' : 'none'));
-    }
-  };
-  window.addEventListener('resize', updateHotspotVisibility);
-  document.addEventListener('DOMContentLoaded', updateHotspotVisibility);
-  // also toggle when panel changes
-  if (mobilePanel) {
-    const obs = new MutationObserver(updateHotspotVisibility);
-    obs.observe(mobilePanel, { attributes: true, attributeFilter: ['class'] });
-  }
-})();
-
-// Swipe detection anywhere on the page mapped to arrow keys
-(function initKonamiSwipes() {
-  if (!('ontouchstart' in window)) return; // only for touch devices
-
-  let startX = 0, startY = 0, startTime = 0;
-  const threshold = 30; // min px move to be considered swipe
-  const timeLimit = 700; // ms max for swipe
-
-  function onTouchStart(e) {
-    if (!e.touches || e.touches.length > 1) return;
-    const t = e.touches[0];
-    startX = t.clientX;
-    startY = t.clientY;
-    startTime = Date.now();
-  }
-
-  function onTouchEnd(e) {
-    // If touchend has changedTouches, use last known clientX/Y
-    const touch = (e.changedTouches && e.changedTouches[0]) || null;
-    if (!touch) return;
-    const dx = touch.clientX - startX;
-    const dy = touch.clientY - startY;
-    const dt = Date.now() - startTime;
-    if (dt > timeLimit) return; // too slow for a swipe
-    if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return; // not enough movement
-
-    // Determine primary direction
-    if (Math.abs(dx) > Math.abs(dy)) {
-      if (dx > 0) handleKonamiKey('ArrowRight');
-      else handleKonamiKey('ArrowLeft');
-    } else {
-      if (dy > 0) handleKonamiKey('ArrowDown');
-      else handleKonamiKey('ArrowUp');
-    }
-
-    // show a visual token quickly (already done inside handleKonamiKey via showKeyToken)
-  }
-
-  document.addEventListener('touchstart', onTouchStart, {passive:true});
-  document.addEventListener('touchend', onTouchEnd, {passive:true});
-})();
-
-/* ---------- Card tilt (desktop) ---------- */
-(function initCardTilt() {
-  if (window.matchMedia && window.matchMedia('(pointer: fine)').matches === false) return; // desktop only
-  const cards = document.querySelectorAll('.project-card');
-  if (!cards.length) return;
-
-  cards.forEach(card => {
-    let raf = null;
+  document.querySelectorAll('.project-card').forEach((card) => {
     let rect = null;
-    const intensity = 12; // max degrees
+    let frame = null;
 
-    function onMove(e) {
-      if (!rect) rect = card.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width; // 0..1
-      const y = (e.clientY - rect.top) / rect.height; // 0..1
-      const rotateY = (x - 0.5) * (intensity * -1);
-      const rotateX = (y - 0.5) * (intensity);
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      });
-    }
-
-    function onLeave() {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
+    const reset = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
         card.style.transform = '';
       });
-    }
+    };
 
-    card.addEventListener('mousemove', onMove);
-    card.addEventListener('mouseleave', onLeave);
-    // keyboard/focus reset
-    card.addEventListener('blur', onLeave, true);
-    window.addEventListener('resize', () => rect = null);
+    card.addEventListener('mousemove', (event) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      const rotateY = (x - 0.5) * -10;
+      const rotateX = (y - 0.5) * 10;
+
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+    });
+
+    card.addEventListener('mouseleave', reset);
+    card.addEventListener('blur', reset, true);
+    window.addEventListener('resize', () => {
+      rect = null;
+    });
   });
-})();
+}
 
-/* ---------- Button ripple effect ---------- */
-(function initButtonRipple() {
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.btn');
-    if (!btn) return;
-    // don't add ripples if reduced motion
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+function initButtonRipple() {
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('.btn');
+    if (!button || prefersReducedMotion()) return;
 
-    const rect = btn.getBoundingClientRect();
+    const rect = button.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height) * 1.2;
     const ripple = document.createElement('span');
     ripple.className = 'ripple';
-    ripple.style.width = ripple.style.height = `${size}px`;
-    const left = e.clientX - rect.left - size / 2;
-    const top = e.clientY - rect.top - size / 2;
-    ripple.style.left = `${left}px`;
-    ripple.style.top = `${top}px`;
-    btn.appendChild(ripple);
+    ripple.style.width = `${size}px`;
+    ripple.style.height = `${size}px`;
+    ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+    ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
 
-    // cleanup after animation
-    setTimeout(() => {
-      ripple.remove();
-    }, 750);
-  }, { passive: true });
-})();
-
-/* ---------- Modal entrance class hookup (works with existing initModals) ---------- */
-/* Enhance openModal/closeModal by toggling .open-anim on the dialog.
-   We patch the existing click handler by observing modal open state changes.
-*/
-(function initModalAnimHook() {
-  const observer = new MutationObserver((entries) => {
-    entries.forEach(entry => {
-      const modal = entry.target;
-      if (modal.classList.contains('is-open')) {
-        const dlg = modal.querySelector('.modal-dialog');
-        if (dlg) {
-          // small timeout to ensure CSS transition triggers
-          requestAnimationFrame(() => dlg.classList.add('open-anim'));
-        }
-      } else {
-        const dlg = modal.querySelector('.modal-dialog');
-        if (dlg) dlg.classList.remove('open-anim');
-      }
-    });
+    button.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 750);
   });
-
-  document.querySelectorAll('.modal').forEach(m => {
-    observer.observe(m, { attributes: true, attributeFilter: ['class'] });
-  });
-})();
-
-
+}

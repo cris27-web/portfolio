@@ -3,212 +3,172 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cristian Simut | Portfolio</title>
+  <meta name="description" content="Cristian Simut, frontend developer and designer portfolio." />
+  <title>Cristian Simut | Frontend Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles/main.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+  <script src="scripts/main.js" defer></script>
 </head>
 <body>
-<div class="parallax-bg" aria-hidden="true">
-  <span class="blob b1" data-depth="0.08"></span>
-  <span class="blob b2" data-depth="0.14"></span>
-</div>
-  <header>
+  <div class="parallax-bg" aria-hidden="true">
+    <span class="blob b1" data-depth="0.08"></span>
+    <span class="blob b2" data-depth="0.14"></span>
+  </div>
+
+  <header class="site-header">
+    <p class="eyebrow">Cristian Simut</p>
     <h1>CrisDevs</h1>
-    <h2 id="tagline">Web Developer & Designer
-      <!-- subtle hint near the tagline -->
-      <span class="easter-hint" data-hint="Try arrow keys or the hidden controller on mobile">Hint</span>
-    </h2>
+    <h2 id="tagline" data-fulltext="Web Developer & Designer">Web Developer & Designer</h2>
   </header>
-  
-  <nav id="side-nav">
-  <ul>
-    <li><a href="#about" class="active">About</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#projects">Projects</a></li>
-  </ul>
-</nav>
 
+  <nav id="side-nav" aria-label="Section navigation">
+    <ul>
+      <li><a href="#about" class="active">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+    </ul>
+  </nav>
 
-
-<div class="container">
-  <section id="about" class="fade-slide-in">
-    <div class="about-grid container">
-      <div class="about-media">
-        <img src="./images/memoji.png" alt="Cristian Simut — portrait" />
-      </div>
-
-      <div class="about-body">
-        <h2>About Me</h2>
-        <p class="lead">Hi — I'm <strong>Cristian Simut</strong>, a frontend developer who crafts accessible, performant, and visually clean web experiences. I focus on modern tooling, thoughtful design and maintainable code.</p>
-
-        <ul class="about-highlights" aria-hidden="false">
-          <li><strong>Role:</strong> Frontend Developer & Designer</li>
-          <li><strong>Location:</strong> Remote / Europe</li>
-          <li><strong>Focus:</strong> UI, animations, performance & UX</li>
-        </ul>
-
-        <div class="about-actions">
-          <a class="btn btn-primary" href="mailto:cristian.simut@yahoo.com">Email Me</a>
-          <a class="btn btn-ghost" href="assets/Cristian-Simut-CV.pdf" download>Download CV</a>
+  <main class="container">
+    <section id="about" class="fade-slide-in">
+      <div class="about-grid">
+        <div class="about-media">
+          <img src="images/memoji.png" alt="Memoji portrait of Cristian Simut" />
         </div>
 
-        <p class="about-extra">I enjoy turning ideas into polished interfaces. Available for contract work and collaboration.</p>
-      </div>
-    </div>
-  </section>
+        <div class="about-body">
+          <h2 class="section-title">About Me</h2>
+          <p class="lead">Hi, I'm <strong>Cristian Simut</strong>, a frontend developer who crafts accessible, performant, and visually clean web experiences. I focus on modern tooling, thoughtful design, and maintainable code.</p>
 
-<section id="skills">
-  <h3>My Skills <span class="easter-hint" data-hint="Mobile players: tap the hidden controller (bottom)"></span></h3>
-  <div class="skill">
-    <span class="skill-name"><i class="fab fa-html5"></i> HTML</span>
-    <div class="skill-bar">
-      <div class="skill-fill" data-fill="95%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <span class="percent">95%</span>
-      </div>
-    </div>
-  </div>
-  <div class="skill">
-    <span class="skill-name"><i class="fab fa-css3-alt"></i> CSS</span>
-    <div class="skill-bar">
-      <div class="skill-fill" data-fill="75%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <span class="percent">75%</span>
-      </div>
-    </div>
-  </div>
-  <div class="skill">
-    <span class="skill-name"><i class="fab fa-js-square"></i> JavaScript</span>
-    <div class="skill-bar">
-      <div class="skill-fill" data-fill="55%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <span class="percent">55%</span>
-      </div>
-    </div>
-  </div>
-  <div class="skill">
-    <span class="skill-name"><i class="fab fa-react"></i> React</span>
-    <div class="skill-bar">
-      <div class="skill-fill" data-fill="25%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <span class="percent">25%</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <section id="projects">
-  <h3 class="reveal-fade">My Projects <span class="easter-hint" data-hint="It's a classic code — listen for the rhythm"></span></h3>
-  <div class="project-list">
-    <!-- Project 1 -->
-    <article class="project-card reveal-up" role="article" aria-labelledby="proj-1-title">
-      <div class="project-media">
-        <img class="project-thumb" loading="lazy" src="./images/PP.png" alt="Personal Portfolio screenshot" />
-      </div>
-      <div class="project-content">
-        <header class="project-header">
-          <h4 id="proj-1-title">Personal Portfolio</h4>
-          <ul class="tags">
-            <li class="tag">HTML</li>
-            <li class="tag">SCSS</li>
-            <li class="tag">JavaScript</li>
-            <li class="tag">Anime.js</li>
+          <ul class="about-highlights">
+            <li><strong>Role:</strong> Frontend Developer & Designer</li>
+            <li><strong>Location:</strong> Remote / Europe</li>
+            <li><strong>Focus:</strong> UI, animations, performance & UX</li>
           </ul>
-        </header>
-        <p class="project-desc">
-          A minimalist, animated portfolio showcasing my work, skills and contact links.
-        </p>
-        <div class="project-actions">
-          <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
-          <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener">GitHub</a>
-          <button class="btn btn-outline open-modal" data-target="#project-1-modal">More Info</button>
+
+          <div class="about-actions">
+            <a class="btn btn-primary" href="mailto:cristian.simut@yahoo.com">
+              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+              Email Me
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/cris27-web" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-github" aria-hidden="true"></i>
+              GitHub
+            </a>
+          </div>
+
+          <p class="about-extra">I enjoy turning ideas into polished interfaces and am available for contract work and collaboration.</p>
         </div>
       </div>
-    </article>
+    </section>
 
-    <!-- Project 2 -->
-    <article class="project-card reveal-up" role="article" aria-labelledby="proj-2-title">
-      <div class="project-media">
-        <img class="project-thumb" loading="lazy" src="./images/kurless.png" alt="KurlessACM screenshot"/>
-      </div>
-      <div class="project-content">
-        <header class="project-header">
-          <h4 id="proj-2-title">KurlessACM</h4>
-          <ul class="tags">
-            <li class="tag">HTML</li>
-            <li class="tag">CSS</li>
-            <li class="tag">JavaScript</li>
-          </ul>
-        </header>
-        <p class="project-desc">
-          E-commerce website for KurlessACM, featuring a clean design and smooth interactions.
-        </p>
-        <div class="project-actions">
-          <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
-          <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener">GitHub</a>
-          <button class="btn btn-outline open-modal" data-target="#project-2-modal">More Info</button>
-        </div>
-      </div>
-    </article>
+    <section id="skills">
+      <h2 class="section-title">My Skills</h2>
 
-    <!-- Project 3 -->
-    <article class="project-card reveal-up" role="article" aria-labelledby="proj-3-title">
-      <div class="project-media">
-        <img class="project-thumb" loading="lazy" src="./images/project-3-thumb.png" alt="Project Three screenshot" />
-      </div>
-      <div class="project-content">
-        <header class="project-header">
-          <h4 id="proj-3-title">Project Three</h4>
-          <ul class="tags">
-            <li class="tag">React</li>
-            <li class="tag">Vite</li>
-            <li class="tag">CSS</li>
-          </ul>
-        </header>
-        <p class="project-desc">
-          Short one-liner about what it does and why it’s cool.
-        </p>
-        <div class="project-actions">
-          <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Live Demo</a>
-          <a class="btn btn-ghost" href="#" target="_blank" rel="noopener">GitHub</a>
-          <button class="btn btn-outline open-modal" data-target="#project-3-modal">More Info</button>
-        </div>
-      </div>
-    </article>
+      <div class="skills-grid">
+        <article class="skill-card" data-fill="95" aria-label="HTML skill: 95 percent">
+          <div class="skill-ring" aria-hidden="true" style="--pct:0">
+            <span class="skill-percent">0%</span>
+          </div>
+          <div class="skill-info">
+            <h3 class="skill-name"><i class="fab fa-html5" aria-hidden="true"></i> HTML</h3>
+            <p class="skill-meta">6 years - semantic, accessible markup</p>
+          </div>
+        </article>
 
-    <!-- Project 4 -->
-    <article class="project-card reveal-up" role="article" aria-labelledby="proj-4-title">
-      <div class="project-media">
-        <img class="project-thumb" loading="lazy" src="./images/project-4-thumb.png" alt="Project Four screenshot" />
-      </div>
-      <div class="project-content">
-        <header class="project-header">
-          <h4 id="proj-4-title">Project Four</h4>
-          <ul class="tags">
-            <li class="tag">React</li>
-            <li class="tag">Vite</li>
-            <li class="tag">CSS</li>
-          </ul>
-        </header>
-        <p class="project-desc">
-          Short one-liner about what it does and why it’s cool.
-        </p>
-        <div class="project-actions">
-          <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Live Demo</a>
-          <a class="btn btn-ghost" href="#" target="_blank" rel="noopener">GitHub</a>
-          <button class="btn btn-outline open-modal" data-target="#project-4-modal">More Info</button>
-        </div>
-      </div>
-    </article>
-  </div>
-</section>
+        <article class="skill-card" data-fill="80" aria-label="CSS skill: 80 percent">
+          <div class="skill-ring" aria-hidden="true" style="--pct:0">
+            <span class="skill-percent">0%</span>
+          </div>
+          <div class="skill-info">
+            <h3 class="skill-name"><i class="fab fa-css3-alt" aria-hidden="true"></i> CSS</h3>
+            <p class="skill-meta">5 years - responsive layout and animation</p>
+          </div>
+        </article>
 
+        <article class="skill-card" data-fill="70" aria-label="JavaScript skill: 70 percent">
+          <div class="skill-ring" aria-hidden="true" style="--pct:0">
+            <span class="skill-percent">0%</span>
+          </div>
+          <div class="skill-info">
+            <h3 class="skill-name"><i class="fab fa-js-square" aria-hidden="true"></i> JavaScript</h3>
+            <p class="skill-meta">4 years - ES6+, DOM, and tooling</p>
+          </div>
+        </article>
 
-  <!-- changed: larger themed social buttons -->
-  <div id="contact-sidebar">
+        <article class="skill-card" data-fill="40" aria-label="React skill: 40 percent">
+          <div class="skill-ring" aria-hidden="true" style="--pct:0">
+            <span class="skill-percent">0%</span>
+          </div>
+          <div class="skill-info">
+            <h3 class="skill-name"><i class="fab fa-react" aria-hidden="true"></i> React</h3>
+            <p class="skill-meta">2 years - components and hooks</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2 class="reveal-fade section-title">My Projects <span class="easter-hint" data-hint="It's a classic code - listen for the rhythm" aria-hidden="true"></span></h2>
+
+      <div class="project-list">
+        <article class="project-card reveal-up" aria-labelledby="proj-1-title">
+          <div class="project-media">
+            <img class="project-thumb" src="images/PP.png" alt="Personal Portfolio homepage screenshot" />
+          </div>
+          <div class="project-content">
+            <header class="project-header">
+              <h3 id="proj-1-title">Personal Portfolio</h3>
+              <ul class="tags" aria-label="Technologies used">
+                <li class="tag">HTML</li>
+                <li class="tag">SCSS</li>
+                <li class="tag">JavaScript</li>
+                <li class="tag">Anime.js</li>
+              </ul>
+            </header>
+            <p class="project-desc">A minimalist, animated portfolio showcasing my work, skills, and contact links.</p>
+            <div class="project-actions">
+              <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+              <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <button class="btn btn-outline open-modal" type="button" data-target="#project-1-modal">More Info</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card reveal-up" aria-labelledby="proj-2-title">
+          <div class="project-media">
+            <img class="project-thumb" src="images/kurless.png" alt="KurlessACM ecommerce website screenshot" />
+          </div>
+          <div class="project-content">
+            <header class="project-header">
+              <h3 id="proj-2-title">KurlessACM</h3>
+              <ul class="tags" aria-label="Technologies used">
+                <li class="tag">HTML</li>
+                <li class="tag">CSS</li>
+                <li class="tag">JavaScript</li>
+              </ul>
+            </header>
+            <p class="project-desc">An ecommerce website for KurlessACM with a clean product experience and smooth interactions.</p>
+            <div class="project-actions">
+              <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+              <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <button class="btn btn-outline open-modal" type="button" data-target="#project-2-modal">More Info</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <aside id="contact-sidebar" aria-label="Contact links">
     <ul class="social-links">
       <li>
-        <a class="social-btn" href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        <a class="social-btn" href="mailto:cristian.simut@yahoo.com" aria-label="Email Cristian" title="Email">
+          <i class="fa-solid fa-envelope" aria-hidden="true"></i>
         </a>
       </li>
       <li>
@@ -217,148 +177,83 @@
         </a>
       </li>
     </ul>
-  </div>
-  
-  </div>
+  </aside>
 
   <div id="floating-time-widget" aria-live="polite" aria-label="Current time">
-  <span id="floating-time"></span>
-</div>
+    <span id="floating-time"></span>
+  </div>
 
-  <button id="back-to-top" title="Back to top">↑</button>
-<!-- Modal for Project 1 -->
-<div id="project-1-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-dialog" role="document">
-    <button class="modal-close" aria-label="Close" data-close>&times;</button>
-    <h4>Personal Portfolio – Case Study</h4>
-    <div class="modal-grid">
-      <div>
-        <h5>Problem</h5>
-        <p>I needed a clean, branded portfolio to showcase projects, skills, and socials with subtle interactions.</p>
-      </div>
-      <div>
-        <h5>My Role</h5>
-        <p>Design, Frontend development, Animations, Theming.</p>
-      </div>
-      <div>
-        <h5>Tools</h5>
-        <ul class="tags">
-          <li class="tag">HTML</li>
-          <li class="tag">SCSS</li>
-          <li class="tag">JavaScript</li>
-          <li class="tag">Anime.js</li>
-          <li class="tag">Netlify</li>
-        </ul>
-      </div>
-      <div class="modal-actions">
-        <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
-        <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </div>
-  </div>
-</div>
+  <button id="back-to-top" type="button" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </button>
 
-<!-- Modal for Project 2 (copy and change IDs/content/links) -->
-<div id="project-2-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-dialog" role="document">
-    <button class="modal-close" aria-label="Close" data-close>&times;</button>
-    <h4>E-commerce Website</h4>
-    <div class="modal-grid">
-            <div>
-        <h5>Problem</h5>
-        <p>I needed a clean, branded e-commerce website to showcase products with subtle interactions.</p>
+  <div id="project-1-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-1-modal-title">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-dialog" role="document">
+      <button class="modal-close" type="button" aria-label="Close" data-close>&times;</button>
+      <div class="modal-grid">
+        <div class="modal-media">
+          <img src="images/PP.png" alt="Personal Portfolio screenshot preview" />
+        </div>
+        <div class="modal-body">
+          <h3 id="project-1-modal-title">Personal Portfolio Case Study</h3>
+          <p><strong>Problem</strong></p>
+          <p>I needed a clean, branded portfolio to showcase projects, skills, and socials with subtle interactions.</p>
+          <p><strong>My Role</strong></p>
+          <p>Design, frontend development, animation, and theming.</p>
+          <p><strong>Tools</strong></p>
+          <ul class="tags">
+            <li class="tag">HTML</li>
+            <li class="tag">SCSS</li>
+            <li class="tag">JavaScript</li>
+            <li class="tag">Anime.js</li>
+            <li class="tag">Netlify</li>
+          </ul>
+          <div class="modal-actions">
+            <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+            <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
       </div>
-      <div>
-        <h5>My Role</h5>
-        <p>End-to-end developer, handling design, coding, backend functions, and deployment</p>
-      </div>
-      <div>
-        <h5>Tools</h5>
-        <ul class="tags">
-          <li class="tag">HTML</li>
-          <li class="tag">CSS</li>
-          <li class="tag">JavaScript</li>
-          <li class="tag">Git</li>
-          <li class="tag">Batchscript</li>
-          <li class="tag">Netlify</li>
-        </ul>
-      </div>
-      <div class="modal-actions">
-        <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
-        <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener">GitHub</a>
-      </div>
-      <!-- same structure as above -->
     </div>
   </div>
-</div>
-<div id="project-3-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-dialog" role="document">
-    <button class="modal-close" aria-label="Close" data-close>&times;</button>
-    <h4>Project Three – Case Study</h4>
-    <div class="modal-grid">
-            <div>
-        <h5>Problem</h5>
-        <p>TBA</p>
+
+  <div id="project-2-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-2-modal-title">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-dialog" role="document">
+      <button class="modal-close" type="button" aria-label="Close" data-close>&times;</button>
+      <div class="modal-grid">
+        <div class="modal-media">
+          <img src="images/kurless.png" alt="KurlessACM website screenshot preview" />
+        </div>
+        <div class="modal-body">
+          <h3 id="project-2-modal-title">KurlessACM Case Study</h3>
+          <p><strong>Problem</strong></p>
+          <p>KurlessACM needed a straightforward storefront experience to present products clearly and build trust.</p>
+          <p><strong>My Role</strong></p>
+          <p>End-to-end frontend implementation, interaction design, and deployment.</p>
+          <p><strong>Tools</strong></p>
+          <ul class="tags">
+            <li class="tag">HTML</li>
+            <li class="tag">CSS</li>
+            <li class="tag">JavaScript</li>
+            <li class="tag">Git</li>
+            <li class="tag">Netlify</li>
+          </ul>
+          <div class="modal-actions">
+            <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+            <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
       </div>
-      <div>
-        <h5>My Role</h5>
-        <p>Design, Frontend development, Animations, Theming.</p>
-      </div>
-      <div>
-        <h5>Tools</h5>
-        <ul class="tags">
-          <li class="tag">HTML</li>
-          <li class="tag">SCSS</li>
-          <li class="tag">JavaScript</li>
-          <li class="tag">Anime.js</li>
-          <li class="tag">Netlify</li>
-        </ul>
-      </div>
-      <div class="modal-actions">
-        <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
-        <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener">GitHub</a>
-      </div>
-      <!-- same structure as above -->
     </div>
   </div>
-</div>
-<div id="project-4-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-dialog" role="document">
-    <button class="modal-close" aria-label="Close" data-close>&times;</button>
-    <h4>Project Two – Case Study</h4>
-    <div class="modal-grid">
-            <div>
-        <h5>Problem</h5>
-        <p>TBA</p>
-      </div>
-      <div>
-        <h5>My Role</h5>
-        <p>Design, Frontend development, Animations, Theming.</p>
-      </div>
-      <div>
-        <h5>Tools</h5>
-        <ul class="tags">
-          <li class="tag">HTML</li>
-          <li class="tag">SCSS</li>
-          <li class="tag">JavaScript</li>
-          <li class="tag">Anime.js</li>
-          <li class="tag">Netlify</li>
-        </ul>
-      </div>
-      <div class="modal-actions">
-        <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener">Live Demo</a>
-        <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener">GitHub</a>
-      </div>
-      <!-- same structure as above -->
-    </div>
+
+  <div id="konami-overlay" aria-hidden="true">
+    <div class="key-sequence" aria-hidden="true"></div>
+    <p class="konami-msg" aria-live="polite"></p>
   </div>
-</div>
-<!-- ensure only one canvas + script include remain -->
-<canvas id="fireworks-canvas" aria-hidden="true"></canvas>
-<script src="scripts/main.js"></script>
+
+  <canvas id="fireworks-canvas" aria-hidden="true"></canvas>
 </body>
 </html>
