@@ -24,6 +24,7 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 2rem;
+  overflow-x: clip;
   background:
     radial-gradient(circle at 12% 18%, rgba(189, 189, 189, 0.08), transparent 18rem),
     radial-gradient(circle at 82% 72%, rgba(143, 144, 146, 0.07), transparent 20rem),
@@ -80,7 +81,7 @@ a {
 
 .site-header {
   max-width: 760px;
-  margin: 0 auto 3rem;
+  margin: 1.5rem auto 2rem;
   text-align: center;
 
   .eyebrow {
@@ -93,16 +94,32 @@ a {
 
   h1 {
     margin: 0;
-    font-size: clamp(2.7rem, 8vw, 5rem);
-    line-height: 1;
+    font-size: clamp(2.75rem, 8vw, 5.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.055em;
+    overflow-wrap: anywhere;
   }
 
-  h2 {
-    min-height: 1.8rem;
-    margin: 0.55rem 0 0;
+  .hero-role {
+    margin: 0.7rem 0 0;
     color: var(--accent-color);
     font-size: clamp(1.05rem, 3vw, 1.45rem);
-    font-weight: 400;
+    font-weight: 600;
+  }
+
+  .hero-summary {
+    max-width: 610px;
+    margin: 0.75rem auto 0;
+    color: var(--text-secondary);
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-top: 1.25rem;
   }
 }
 
@@ -161,11 +178,11 @@ section {
 }
 
 #about {
-  padding-top: 2.5rem;
+  padding-top: 2rem;
 
   .about-grid {
     display: grid;
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: 180px minmax(0, 1fr);
     gap: 1.5rem;
     align-items: center;
     max-width: 1000px;
@@ -175,6 +192,11 @@ section {
   .about-media {
     display: flex;
     justify-content: center;
+    min-width: 0;
+  }
+
+  .about-body {
+    min-width: 0;
   }
 
   .about-media img {
@@ -207,6 +229,7 @@ section {
   list-style: none;
 
   li {
+    max-width: 100%;
     padding: 0.45rem 0.7rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 999px;
@@ -214,6 +237,7 @@ section {
     color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: 600;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -739,11 +763,38 @@ section {
 @media (max-width: 768px) {
   body {
     padding: 1rem;
-    padding-bottom: 6rem;
+    padding-bottom: 2rem;
   }
 
   #side-nav {
-    display: none;
+    position: sticky;
+    top: 0.75rem;
+    left: auto;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 0.5rem;
+    padding: 0.3rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    background: rgba(18, 19, 22, 0.88);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(12px);
+    transform: none;
+
+    ul {
+      display: flex;
+      gap: 0.15rem;
+    }
+
+    li {
+      margin: 0;
+    }
+
+    a {
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+    }
   }
 
   section {
@@ -752,7 +803,7 @@ section {
 
   #about {
     .about-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       text-align: center;
     }
 
@@ -774,26 +825,7 @@ section {
   }
 
   #contact-sidebar {
-    top: auto;
-    right: auto;
-    bottom: 18px;
-    left: 50%;
-    padding: 0.25rem 0.5rem;
-    border-radius: 999px;
-    background: rgba(20, 20, 22, 0.7);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-    transform: translateX(-50%);
-
-    .social-links {
-      flex-direction: row;
-      gap: 0.6rem;
-    }
-
-    a {
-      width: 44px;
-      height: 44px;
-      font-size: 1.2rem;
-    }
+    display: none;
   }
 
   #floating-time-widget {
@@ -802,6 +834,19 @@ section {
 }
 
 @media (max-width: 480px) {
+  .site-header {
+    margin-top: 0.75rem;
+
+    h1 {
+      font-size: clamp(2.4rem, 14vw, 3.5rem);
+    }
+
+    .hero-actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+  }
+
   .section-title {
     font-size: 1.45rem;
   }
