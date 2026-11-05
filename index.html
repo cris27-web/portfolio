@@ -42,12 +42,12 @@
 
         <div class="about-body">
           <h2 class="section-title">About Me</h2>
-          <p class="lead">Hi, I'm <strong>Cristian Simut</strong>, a frontend developer who crafts accessible, performant, and visually clean web experiences. I focus on modern tooling, thoughtful design, and maintainable code.</p>
+          <p class="lead">Hi, I'm <strong>Cristian Simut</strong>, a web developer who builds responsive websites and practical web applications. My projects range from Shopify-powered storefronts to AI tools built with Vue, Nuxt, and TypeScript. I care about clear interfaces, accessible design, and turning ideas into useful experiences.</p>
 
           <ul class="about-highlights">
-            <li><strong>Role:</strong> Frontend Developer & Designer</li>
+            <li><strong>Role:</strong> Web Developer</li>
             <li><strong>Location:</strong> Remote / Europe</li>
-            <li><strong>Focus:</strong> UI, animations, performance & UX</li>
+            <li><strong>Focus:</strong> Responsive interfaces, ecommerce, and API integrations</li>
           </ul>
 
           <div class="about-actions">
@@ -66,48 +66,53 @@
       </div>
     </section>
 
-    <section id="skills">
-      <h2 class="section-title">My Skills</h2>
+    <section id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title" class="section-title">My Skills</h2>
 
       <div class="skills-grid">
-        <article class="skill-card" data-fill="95" aria-label="HTML skill: 95 percent">
-          <div class="skill-ring" aria-hidden="true" style="--pct:0">
-            <span class="skill-percent">0%</span>
-          </div>
-          <div class="skill-info">
-            <h3 class="skill-name"><i class="fab fa-html5" aria-hidden="true"></i> HTML</h3>
-            <p class="skill-meta">6 years - semantic, accessible markup</p>
-          </div>
+        <article class="skill-card" aria-labelledby="skill-frontend">
+          <h3 id="skill-frontend" class="skill-name"><i class="fa-solid fa-code" aria-hidden="true"></i> Frontend</h3>
+          <p class="skill-meta">Responsive layouts, accessible markup, mobile navigation, and interactive interfaces.</p>
+          <ul class="tags" aria-label="Frontend technologies">
+            <li class="tag">HTML</li>
+            <li class="tag">CSS / SCSS</li>
+            <li class="tag">JavaScript</li>
+            <li class="tag">TypeScript</li>
+          </ul>
+          <a class="skill-project" href="#proj-1-title">See my portfolio project <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </article>
 
-        <article class="skill-card" data-fill="80" aria-label="CSS skill: 80 percent">
-          <div class="skill-ring" aria-hidden="true" style="--pct:0">
-            <span class="skill-percent">0%</span>
-          </div>
-          <div class="skill-info">
-            <h3 class="skill-name"><i class="fab fa-css3-alt" aria-hidden="true"></i> CSS</h3>
-            <p class="skill-meta">5 years - responsive layout and animation</p>
-          </div>
+        <article class="skill-card" aria-labelledby="skill-ecommerce">
+          <h3 id="skill-ecommerce" class="skill-name"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i> Ecommerce</h3>
+          <p class="skill-meta">Shopify product, cart, and checkout integration, plus contact forms with client-side validation.</p>
+          <ul class="tags" aria-label="Ecommerce tools and skills">
+            <li class="tag">Shopify Buy Button</li>
+            <li class="tag">Formspree</li>
+            <li class="tag">Form validation</li>
+          </ul>
+          <a class="skill-project" href="#proj-2-title">See my KurlessACM store <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </article>
 
-        <article class="skill-card" data-fill="70" aria-label="JavaScript skill: 70 percent">
-          <div class="skill-ring" aria-hidden="true" style="--pct:0">
-            <span class="skill-percent">0%</span>
-          </div>
-          <div class="skill-info">
-            <h3 class="skill-name"><i class="fab fa-js-square" aria-hidden="true"></i> JavaScript</h3>
-            <p class="skill-meta">4 years - ES6+, DOM, and tooling</p>
-          </div>
+        <article class="skill-card" aria-labelledby="skill-frameworks">
+          <h3 id="skill-frameworks" class="skill-name"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Frameworks</h3>
+          <p class="skill-meta">Reusable components, server-rendered pages, and API routes.</p>
+          <ul class="tags" aria-label="Framework technologies">
+            <li class="tag">Vue</li>
+            <li class="tag">Nuxt</li>
+          </ul>
+          <a class="skill-project" href="#proj-3-title">See my AI blog generator <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </article>
 
-        <article class="skill-card" data-fill="40" aria-label="React skill: 40 percent">
-          <div class="skill-ring" aria-hidden="true" style="--pct:0">
-            <span class="skill-percent">0%</span>
-          </div>
-          <div class="skill-info">
-            <h3 class="skill-name"><i class="fab fa-react" aria-hidden="true"></i> React</h3>
-            <p class="skill-meta">2 years - components and hooks</p>
-          </div>
+        <article class="skill-card" aria-labelledby="skill-apis">
+          <h3 id="skill-apis" class="skill-name"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i> APIs &amp; Deployment</h3>
+          <p class="skill-meta">API integration, CSV validation, and saving generated content for the web.</p>
+          <ul class="tags" aria-label="API and deployment technologies">
+            <li class="tag">Gemini API</li>
+            <li class="tag">Papa Parse</li>
+            <li class="tag">Netlify</li>
+            <li class="tag">Netlify Blobs</li>
+          </ul>
+          <a class="skill-project" href="#proj-3-title">See my AI blog generator <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </article>
       </div>
     </section>

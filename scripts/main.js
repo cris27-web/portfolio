@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScrolling();
   initBackToTop();
   initFloatingTime();
-  initSkills();
   initSideNav();
   initRevealOnScroll();
   initModals();
@@ -115,66 +114,6 @@ function initFloatingTime() {
 
   update();
   setInterval(update, 60 * 1000);
-}
-
-function initSkills() {
-  const skillsSection = document.getElementById('skills');
-  const cards = document.querySelectorAll('.skill-card');
-  if (!skillsSection || !cards.length) return;
-
-  const animate = () => {
-    const reduce = prefersReducedMotion();
-
-    cards.forEach((card) => {
-      if (card.dataset.animated === 'true') return;
-      card.dataset.animated = 'true';
-
-      const target = Number.parseInt(card.dataset.fill || '0', 10);
-      const ring = card.querySelector('.skill-ring');
-      const percent = card.querySelector('.skill-percent');
-
-      if (ring) {
-        requestAnimationFrame(() => ring.style.setProperty('--pct', target));
-      }
-
-      if (!percent) return;
-
-      if (reduce) {
-        percent.textContent = `${target}%`;
-        return;
-      }
-
-      const duration = 900;
-      const start = performance.now();
-
-      function step(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        percent.textContent = `${Math.round(target * progress)}%`;
-
-        if (progress < 1) {
-          requestAnimationFrame(step);
-        }
-      }
-
-      requestAnimationFrame(step);
-    });
-  };
-
-  if (!('IntersectionObserver' in window)) {
-    animate();
-    return;
-  }
-
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animate();
-        obs.disconnect();
-      }
-    });
-  }, { threshold: 0.3 });
-
-  observer.observe(skillsSection);
 }
 
 function initSideNav() {
