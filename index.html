@@ -116,6 +116,29 @@
       <h2 class="reveal-fade section-title">My Projects <span class="easter-hint" data-hint="It's a classic code - listen for the rhythm" aria-hidden="true"></span></h2>
 
       <div class="project-list">
+        <article class="project-card reveal-up" aria-labelledby="proj-3-title">
+          <div class="project-media">
+            <img class="project-thumb" src="images/ai-seo-blog-generator.png" alt="AI SEO Blog Generator homepage showing Company Insights and its article generation tools" loading="lazy" />
+          </div>
+          <div class="project-content">
+            <header class="project-header">
+              <h3 id="proj-3-title">AI SEO Blog Generator</h3>
+              <ul class="tags" aria-label="Technologies used">
+                <li class="tag">Nuxt</li>
+                <li class="tag">Vue</li>
+                <li class="tag">TypeScript</li>
+                <li class="tag">Gemini API</li>
+              </ul>
+            </header>
+            <p class="project-desc">Turns company CSV data into AI-generated articles with calculated funding statistics, company rankings, and page-specific SEO metadata.</p>
+            <div class="project-actions">
+              <a class="btn btn-primary" href="https://ai-seo-blog-generator.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+              <a class="btn btn-ghost" href="https://github.com/cris27-web/ai-seo-blog-generator" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <button class="btn btn-outline open-modal" type="button" data-target="#project-3-modal">More Info</button>
+            </div>
+          </div>
+        </article>
+
         <article class="project-card reveal-up" aria-labelledby="proj-1-title">
           <div class="project-media">
             <img class="project-thumb" src="images/PP.png" alt="Personal Portfolio homepage screenshot" />
@@ -243,6 +266,38 @@
           <div class="modal-actions">
             <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
             <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="project-3-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-3-modal-title">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-dialog" role="document">
+      <button class="modal-close" type="button" aria-label="Close" data-close>&times;</button>
+      <div class="modal-grid">
+        <div class="modal-media">
+          <img src="images/ai-seo-blog-generator.png" alt="AI SEO Blog Generator homepage screenshot preview" loading="lazy" />
+        </div>
+        <div class="modal-body">
+          <h3 id="project-3-modal-title">AI SEO Blog Generator Case Study</h3>
+          <p><strong>Problem</strong></p>
+          <p>Turning company datasets into readable articles involves validating data, calculating funding statistics, and presenting company rankings clearly.</p>
+          <p><strong>The Solution</strong></p>
+          <p>A Nuxt application that validates uploaded CSV files, calculates statistics in code, and uses Google Gemini to generate article copy. Articles are saved with Netlify Blobs and served on reusable pages with individual SEO metadata.</p>
+          <p><strong>Tools</strong></p>
+          <ul class="tags">
+            <li class="tag">Nuxt 4</li>
+            <li class="tag">Vue 3</li>
+            <li class="tag">TypeScript</li>
+            <li class="tag">Papa Parse</li>
+            <li class="tag">Gemini API</li>
+            <li class="tag">Netlify Blobs</li>
+          </ul>
+          <div class="modal-actions">
+            <a class="btn btn-primary" href="https://ai-seo-blog-generator.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+            <a class="btn btn-ghost" href="https://github.com/cris27-web/ai-seo-blog-generator" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
         </div>
       </div>
