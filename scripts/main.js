@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeaderAnimation();
   initSmoothScrolling();
   initBackToTop();
-  initFloatingTime();
   initSideNav();
   initRevealOnScroll();
   initModals();
@@ -98,24 +97,6 @@ function initBackToTop() {
   });
 }
 
-function initFloatingTime() {
-  const timeEl = document.getElementById('floating-time');
-  if (!timeEl) return;
-
-  const update = () => {
-    const now = new Date();
-    let hours = now.getHours();
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-
-    hours = hours % 12 || 12;
-    timeEl.textContent = `${hours}:${minutes} ${ampm}`;
-  };
-
-  update();
-  setInterval(update, 60 * 1000);
-}
-
 function initSideNav() {
   const navLinks = Array.from(document.querySelectorAll('#side-nav a[href^="#"]'));
   const sections = navLinks
@@ -153,6 +134,9 @@ function initRevealOnScroll() {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
+        if (entry.target.animate) {
+          entry.target.animate([{ opacity: 0.35, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: 'ease-out' });
+        }
         obs.unobserve(entry.target);
       }
     });
@@ -163,6 +147,8 @@ function initRevealOnScroll() {
 
 function initModals() {
   let lastFocused = null;
+  let backgroundState = [];
+  const focusSelector = 'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
   function focusFirst(modal) {
     const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
@@ -174,6 +160,10 @@ function initModals() {
     if (!modal) return;
 
     lastFocused = document.activeElement;
+    backgroundState = Array.from(document.body.children)
+      .filter((element) => element !== modal && !['SCRIPT', 'STYLE'].includes(element.tagName))
+      .map((element) => ({ element, inert: element.inert }));
+    backgroundState.forEach(({ element }) => { element.inert = true; });
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
@@ -186,6 +176,8 @@ function initModals() {
   function closeModal(modal) {
     if (!modal) return;
 
+    backgroundState.forEach(({ element, inert }) => { element.inert = inert; });
+    backgroundState = [];
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
@@ -214,8 +206,19 @@ function initModals() {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
-    document.querySelectorAll('.modal.is-open').forEach(closeModal);
+    const modal = document.querySelector('.modal.is-open');
+    if (!modal) return;
+    if (event.key === 'Escape') { closeModal(modal); return; }
+    if (event.key !== 'Tab') return;
+    const items = Array.from(modal.querySelectorAll(focusSelector)).filter((el) => el.getClientRects().length);
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (!first) { event.preventDefault(); return; }
+    if (event.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) {
+      event.preventDefault(); first.focus();
+    }
   });
 }
 

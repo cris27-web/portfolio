@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Cristian Simut, frontend developer and designer portfolio." />
-  <title>Cristian Simut | Frontend Developer</title>
+  <meta name="description" content="Cristian Simut, web developer building responsive websites, Shopify storefronts, and AI-powered applications with Vue, Nuxt, and TypeScript." />
+  <title>Cristian Simut | Web Developer</title>
+  <link rel="icon" type="image/png" href="images/memoji.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Cristian Simut | Web Developer" />
+  <meta property="og:description" content="Explore my ecommerce websites, AI applications, and responsive frontend projects." />
+  <meta property="og:url" content="https://crisps.netlify.app/" />
+  <meta property="og:image" content="https://crisps.netlify.app/images/PP.png" />
+  <meta property="og:image:alt" content="Cristian Simut's web development portfolio" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Cristian Simut | Web Developer" />
+  <meta name="twitter:description" content="Ecommerce websites, AI applications, and responsive frontend projects." />
+  <meta name="twitter:image" content="https://crisps.netlify.app/images/PP.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -28,8 +39,8 @@
   <nav id="side-nav" aria-label="Section navigation">
     <ul>
       <li><a href="#about" class="active">About</a></li>
-      <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
     </ul>
   </nav>
 
@@ -63,6 +74,84 @@
 
           <p class="about-extra">I enjoy turning ideas into polished interfaces and am available for contract work and collaboration.</p>
         </div>
+      </div>
+    </section>
+
+
+
+    <section id="projects">
+      <h2 class="reveal-fade section-title">My Projects <span class="easter-hint" data-hint="It's a classic code - listen for the rhythm" aria-hidden="true"></span></h2>
+
+      <div class="project-list">
+        <article class="project-card reveal-up" aria-labelledby="proj-3-title">
+          <div class="project-media">
+            <img class="project-thumb" src="images/ai-seo-blog-generator.png" alt="AI SEO Blog Generator homepage showing Company Insights and its article generation tools" loading="lazy" />
+          </div>
+          <div class="project-content">
+            <header class="project-header">
+              <h3 id="proj-3-title">AI SEO Blog Generator</h3>
+              <ul class="tags" aria-label="Technologies used">
+                <li class="tag">Nuxt</li>
+                <li class="tag">Vue</li>
+                <li class="tag">TypeScript</li>
+                <li class="tag">Gemini API</li>
+              </ul>
+            </header>
+            <p class="project-desc">Turns company CSV data into AI-generated articles with calculated funding statistics, company rankings, and page-specific SEO metadata.</p>
+            <div class="project-actions">
+              <a class="btn btn-primary" href="https://ai-seo-blog-generator.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+              <a class="btn btn-ghost" href="https://github.com/cris27-web/ai-seo-blog-generator" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <button class="btn btn-outline open-modal" type="button" data-target="#project-3-modal">More Info</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card reveal-up" aria-labelledby="proj-2-title">
+          <div class="project-media">
+            <img class="project-thumb" src="images/kurless.png" alt="KurlessACM ecommerce website screenshot" />
+          </div>
+          <div class="project-content">
+            <header class="project-header">
+              <h3 id="proj-2-title">KurlessACM</h3>
+              <ul class="tags" aria-label="Technologies used">
+                <li class="tag">HTML</li>
+                <li class="tag">CSS</li>
+                <li class="tag">JavaScript</li>
+                <li class="tag">Shopify</li>
+                <li class="tag">Formspree</li>
+              </ul>
+            </header>
+            <p class="project-desc">A responsive storefront with Shopify-powered products, cart, and checkout, plus validated contact forms through Formspree.</p>
+            <div class="project-actions">
+              <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+              <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <button class="btn btn-outline open-modal" type="button" data-target="#project-2-modal">More Info</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card reveal-up" aria-labelledby="proj-1-title">
+          <div class="project-media">
+            <img class="project-thumb" src="images/PP.png" alt="Personal Portfolio homepage screenshot" />
+          </div>
+          <div class="project-content">
+            <header class="project-header">
+              <h3 id="proj-1-title">Personal Portfolio</h3>
+              <ul class="tags" aria-label="Technologies used">
+                <li class="tag">HTML</li>
+                <li class="tag">SCSS</li>
+                <li class="tag">JavaScript</li>
+                <li class="tag">Anime.js</li>
+              </ul>
+            </header>
+            <p class="project-desc">A minimalist, animated portfolio showcasing my work, skills, and contact links.</p>
+            <div class="project-actions">
+              <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+              <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <button class="btn btn-outline open-modal" type="button" data-target="#project-1-modal">More Info</button>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -116,80 +205,6 @@
         </article>
       </div>
     </section>
-
-    <section id="projects">
-      <h2 class="reveal-fade section-title">My Projects <span class="easter-hint" data-hint="It's a classic code - listen for the rhythm" aria-hidden="true"></span></h2>
-
-      <div class="project-list">
-        <article class="project-card reveal-up" aria-labelledby="proj-3-title">
-          <div class="project-media">
-            <img class="project-thumb" src="images/ai-seo-blog-generator.png" alt="AI SEO Blog Generator homepage showing Company Insights and its article generation tools" loading="lazy" />
-          </div>
-          <div class="project-content">
-            <header class="project-header">
-              <h3 id="proj-3-title">AI SEO Blog Generator</h3>
-              <ul class="tags" aria-label="Technologies used">
-                <li class="tag">Nuxt</li>
-                <li class="tag">Vue</li>
-                <li class="tag">TypeScript</li>
-                <li class="tag">Gemini API</li>
-              </ul>
-            </header>
-            <p class="project-desc">Turns company CSV data into AI-generated articles with calculated funding statistics, company rankings, and page-specific SEO metadata.</p>
-            <div class="project-actions">
-              <a class="btn btn-primary" href="https://ai-seo-blog-generator.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
-              <a class="btn btn-ghost" href="https://github.com/cris27-web/ai-seo-blog-generator" target="_blank" rel="noopener noreferrer">GitHub</a>
-              <button class="btn btn-outline open-modal" type="button" data-target="#project-3-modal">More Info</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="project-card reveal-up" aria-labelledby="proj-1-title">
-          <div class="project-media">
-            <img class="project-thumb" src="images/PP.png" alt="Personal Portfolio homepage screenshot" />
-          </div>
-          <div class="project-content">
-            <header class="project-header">
-              <h3 id="proj-1-title">Personal Portfolio</h3>
-              <ul class="tags" aria-label="Technologies used">
-                <li class="tag">HTML</li>
-                <li class="tag">SCSS</li>
-                <li class="tag">JavaScript</li>
-                <li class="tag">Anime.js</li>
-              </ul>
-            </header>
-            <p class="project-desc">A minimalist, animated portfolio showcasing my work, skills, and contact links.</p>
-            <div class="project-actions">
-              <a class="btn btn-primary" href="https://crisps.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
-              <a class="btn btn-ghost" href="https://github.com/cris27-web/portfolio" target="_blank" rel="noopener noreferrer">GitHub</a>
-              <button class="btn btn-outline open-modal" type="button" data-target="#project-1-modal">More Info</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="project-card reveal-up" aria-labelledby="proj-2-title">
-          <div class="project-media">
-            <img class="project-thumb" src="images/kurless.png" alt="KurlessACM ecommerce website screenshot" />
-          </div>
-          <div class="project-content">
-            <header class="project-header">
-              <h3 id="proj-2-title">KurlessACM</h3>
-              <ul class="tags" aria-label="Technologies used">
-                <li class="tag">HTML</li>
-                <li class="tag">CSS</li>
-                <li class="tag">JavaScript</li>
-              </ul>
-            </header>
-            <p class="project-desc">An ecommerce website for KurlessACM with a clean product experience and smooth interactions.</p>
-            <div class="project-actions">
-              <a class="btn btn-primary" href="https://kurless-acm.netlify.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
-              <a class="btn btn-ghost" href="https://github.com/cris27-web/kurless" target="_blank" rel="noopener noreferrer">GitHub</a>
-              <button class="btn btn-outline open-modal" type="button" data-target="#project-2-modal">More Info</button>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
   </main>
 
   <aside id="contact-sidebar" aria-label="Contact links">
@@ -207,11 +222,7 @@
     </ul>
   </aside>
 
-  <div id="floating-time-widget" aria-live="polite" aria-label="Current time">
-    <span id="floating-time"></span>
-  </div>
-
-  <button id="back-to-top" type="button" aria-label="Back to top">
+<button id="back-to-top" type="button" aria-label="Back to top">
     <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
   </button>
 
@@ -229,6 +240,10 @@
           <p>I needed a clean, branded portfolio to showcase projects, skills, and socials with subtle interactions.</p>
           <p><strong>My Role</strong></p>
           <p>Design, frontend development, animation, and theming.</p>
+          <p><strong>Challenge &amp; Approach</strong></p>
+          <p>Balancing a clear project showcase with animated interactions. Semantic sections, shared card styles, and reduced-motion support keep the interface consistent.</p>
+          <p><strong>Development Takeaway</strong></p>
+          <p>This project brought together responsive CSS, DOM interactions, and animation preferences in one maintainable static site.</p>
           <p><strong>Tools</strong></p>
           <ul class="tags">
             <li class="tag">HTML</li>
@@ -260,11 +275,17 @@
           <p>KurlessACM needed a straightforward storefront experience to present products clearly and build trust.</p>
           <p><strong>My Role</strong></p>
           <p>End-to-end frontend implementation, interaction design, and deployment.</p>
+          <p><strong>Challenge &amp; Approach</strong></p>
+          <p>Connecting a custom storefront design to a shopping flow. I integrated and styled Shopify Buy Button components for products, cart, and hosted checkout, and used Formspree with client-side validation for contact enquiries.</p>
+          <p><strong>Development Takeaway</strong></p>
+          <p>The project combines third-party commerce components with responsive product layouts, keyboard-aware mobile navigation, and labelled forms.</p>
           <p><strong>Tools</strong></p>
           <ul class="tags">
             <li class="tag">HTML</li>
             <li class="tag">CSS</li>
             <li class="tag">JavaScript</li>
+            <li class="tag">Shopify Buy Button</li>
+            <li class="tag">Formspree</li>
             <li class="tag">Git</li>
             <li class="tag">Netlify</li>
           </ul>
@@ -291,6 +312,12 @@
           <p>Turning company datasets into readable articles involves validating data, calculating funding statistics, and presenting company rankings clearly.</p>
           <p><strong>The Solution</strong></p>
           <p>A Nuxt application that validates uploaded CSV files, calculates statistics in code, and uses Google Gemini to generate article copy. Articles are saved with Netlify Blobs and served on reusable pages with individual SEO metadata.</p>
+          <p><strong>My Role</strong></p>
+          <p>Application development across the upload interface, server-side CSV processing, AI integration, article templates, and persistent storage.</p>
+          <p><strong>Challenge &amp; Approach</strong></p>
+          <p>Keeping numerical data reliable while generating readable copy. Funding totals and averages are calculated in code, while Gemini generates structured prose. Uploaded CSV files are validated before generation.</p>
+          <p><strong>Development Takeaway</strong></p>
+          <p>The project connects a typed Vue/Nuxt interface to server APIs and saved, server-rendered articles. AI-generated prose still needs editorial review.</p>
           <p><strong>Tools</strong></p>
           <ul class="tags">
             <li class="tag">Nuxt 4</li>
